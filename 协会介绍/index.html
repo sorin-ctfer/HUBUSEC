@@ -1,0 +1,266 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>协会介绍</title>
+    <meta name="description" content="湖北大学网络空间安全协会官网" />
+    <link rel="icon" type="image/png" sizes="32x32" href="statics/logo.png" />
+    <link rel="icon" type="image/png" sizes="64x64" href="statics/logo.png" />
+    <link rel="icon" type="image/png" sizes="192x192" href="statics/logo.png" />
+    <link rel="apple-touch-icon" sizes="180x180" href="statics/logo.png" />
+    <link rel="preload" as="image" href="statics/bg.jpg" />
+    <link rel="preload" as="image" href="statics/logofinal.png" />
+    <link rel="stylesheet" href="css/styles.css" />
+  </head>
+  <body>
+    <div class="page-bg" aria-hidden="true"></div>
+    <div id="app">
+      <!-- 流动大字特效：顶部/左侧/右侧 -->
+      <div id="flow-bands" class="flow-bands on-hero" aria-hidden="true">
+        <div class="band band-top">
+          <div class="band-inner">
+            <div class="band-track">
+              <span class="band-text">HUBUSEC</span>
+              <span class="band-text">HUBUSEC</span>
+              <span class="band-text">HUBUSEC</span>
+              <span class="band-text">HUBUSEC</span>
+              <span class="band-text">HUBUSEC</span>
+              <span class="band-text">HUBUSEC</span>
+              <span class="band-text">HUBUSEC</span>
+              <span class="band-text">HUBUSEC</span>
+            </div>
+            <div class="band-track" aria-hidden="true">
+              <span class="band-text">HUBUSEC</span>
+              <span class="band-text">HUBUSEC</span>
+              <span class="band-text">HUBUSEC</span>
+              <span class="band-text">HUBUSEC</span>
+              <span class="band-text">HUBUSEC</span>
+              <span class="band-text">HUBUSEC</span>
+              <span class="band-text">HUBUSEC</span>
+              <span class="band-text">HUBUSEC</span>
+            </div>
+          </div>
+        </div>
+        <div class="band band-left">
+          <div class="band-inner">
+            <div class="band-track">
+              <span class="band-text">JOIN&nbsp;US</span>
+              <span class="band-text">JOIN&nbsp;US</span>
+              <span class="band-text">JOIN&nbsp;US</span>
+              <span class="band-text">JOIN&nbsp;US</span>
+              <span class="band-text">JOIN&nbsp;US</span>
+              <span class="band-text">JOIN&nbsp;US</span>
+              <span class="band-text">JOIN&nbsp;US</span>
+              <span class="band-text">JOIN&nbsp;US</span>
+            </div>
+            <div class="band-track" aria-hidden="true">
+              <span class="band-text">JOIN&nbsp;US</span>
+              <span class="band-text">JOIN&nbsp;US</span>
+              <span class="band-text">JOIN&nbsp;US</span>
+              <span class="band-text">JOIN&nbsp;US</span>
+              <span class="band-text">JOIN&nbsp;US</span>
+              <span class="band-text">JOIN&nbsp;US</span>
+              <span class="band-text">JOIN&nbsp;US</span>
+              <span class="band-text">JOIN&nbsp;US</span>
+            </div>
+          </div>
+        </div>
+        <div class="band band-right">
+          <div class="band-inner">
+            <div class="band-track">
+              <span class="band-text">NEVER&nbsp;GIVEUP</span>
+              <span class="band-text">NEVER&nbsp;GIVEUP</span>
+              <span class="band-text">NEVER&nbsp;GIVEUP</span>
+              <span class="band-text">NEVER&nbsp;GIVEUP</span>
+              <span class="band-text">NEVER&nbsp;GIVEUP</span>
+              <span class="band-text">NEVER&nbsp;GIVEUP</span>
+              <span class="band-text">NEVER&nbsp;GIVEUP</span>
+              <span class="band-text">NEVER&nbsp;GIVEUP</span>
+            </div>
+            <div class="band-track" aria-hidden="true">
+              <span class="band-text">NEVER&nbsp;GIVEUP</span>
+              <span class="band-text">NEVER&nbsp;GIVEUP</span>
+              <span class="band-text">NEVER&nbsp;GIVEUP</span>
+              <span class="band-text">NEVER&nbsp;GIVEUP</span>
+              <span class="band-text">NEVER&nbsp;GIVEUP</span>
+              <span class="band-text">NEVER&nbsp;GIVEUP</span>
+              <span class="band-text">NEVER&nbsp;GIVEUP</span>
+              <span class="band-text">NEVER&nbsp;GIVEUP</span>
+            </div>
+          </div>
+        </div>
+      </div>
+      <!-- 开场动画层（加载后会淡出移除） -->
+      <div id="hero" class="hero" aria-hidden="true">
+        <div class="hero-bg"></div>
+        <img id="intro-logo" class="intro-logo" src="statics/logofinal.png" alt="协会LOGO" />
+      </div>
+
+      <!-- 站点头部与导航 -->
+      <header id="site-header" class="site-header hidden">
+        <div class="header-inner">
+          <div class="brand">
+            <img class="brand-logo" src="statics/logofinal.png" alt="协会LOGO" />
+          </div>
+          <nav class="main-nav" aria-label="主导航">
+            <button class="nav-item is-active" data-route="intro">协会介绍</button>
+            <button class="nav-item" data-route="news">协会新闻</button>
+            <button class="nav-item" data-route="research">研究方向</button>
+            <button class="nav-item" data-route="members">历届成员</button>
+            <button class="nav-item" data-route="join">加入我们</button>
+          </nav>
+        </div>
+      </header>
+
+      <!-- 主内容区 -->
+      <main id="main" class="main hidden" tabindex="-1">
+        <!-- 协会介绍 -->
+        <section id="section-intro" class="section section-active" aria-labelledby="intro-title">
+          <div class="container">
+            <div class="card-grid intro-grid">
+              <article class="glass-card">
+                <h2 id="intro-title">协会介绍</h2>
+                <p class="muted">湖北大学网络空间安全协会创立于2024年，挂靠于湖北大学网络空间安全学院，协会致力于学院学科建设，竞赛支持和分享进步，为湖北大学各年级各专业同学打造完善的网络信息安全学习平台，以热爱，坚持，分享，进步的精神为湖大学子的网安学习之路铺平障碍</p>
+              </article>
+              <article class="glass-card">
+                <h2>协会发展</h2>
+                <p class="muted">湖北网络空间安全协会主要以网络安全为方向，次设编程算法方向，提供多方向支持，形成重点化，两点化，多点并进的发展格局，为我院学子提供完善的学科发展支持</p>
+              </article>
+            </div>
+          </div>
+        </section>
+
+        <!-- 协会新闻（卡片 + 详情丝滑过渡） -->
+        <section id="section-news" class="section" aria-labelledby="news-title">
+          <div class="container">
+            <h2 id="news-title">协会新闻</h2>
+            <div id="news-list" class="news-list" aria-live="polite"></div>
+          </div>
+        </section>
+
+        <!-- 研究方向 -->
+        <section id="section-research" class="section" aria-labelledby="research-title">
+          <div class="container">
+            <div class="card-grid">
+              <article class="glass-card"><h3>Web安全</h3><p class="muted">研究 Web 应用漏洞挖掘与渗透测试，关注攻击原理与防御机制。</p></article>
+              <article class="glass-card"><h3>二进制漏洞挖掘</h3><p class="muted">探索程序底层漏洞的发现、利用与防护技术。</p></article>
+              <article class="glass-card"><h3>逆向工程</h3><p class="muted">分析二进制程序逻辑，还原设计意图与潜在风险。</p></article>
+              <article class="glass-card"><h3>密码学</h3><p class="muted">研究加密算法的安全性及其在实际场景中的正确应用。</p></article>
+              <article class="glass-card"><h3>移动安全</h3><p class="muted">聚焦移动平台与应用的安全机制及常见风险点。</p></article>
+              <article class="glass-card"><h3>人工智能安全</h3><p class="muted">探索 AI 模型与系统的潜在安全威胁与防护方法。</p></article>
+            </div>
+          </div>
+        </section>
+
+        <!-- 历届成员 -->
+        <section id="section-members" class="section" aria-labelledby="members-title">
+          <div class="container">
+            <h2 id="members-title">历届成员</h2>
+            <div class="card-grid members-grid">
+              <article id="members-presidents-toggle" class="glass-card" role="button" tabindex="0" aria-controls="members-presidents" aria-expanded="false">
+                <h3>历届会长</h3>
+                <p class="muted">点击展开查看</p>
+              </article>
+              <div id="members-presidents" class="collapsible" aria-hidden="true">
+                <div id="members-presidents-grid" class="member-grid" aria-live="polite"></div>
+              </div>
+
+              <article id="members-2021-toggle" class="glass-card" role="button" tabindex="0" aria-controls="members-2021" aria-expanded="false">
+                <h3>2021</h3>
+                <p class="muted">点击展开查看</p>
+              </article>
+              <div id="members-2021" class="collapsible" aria-hidden="true">
+                <div id="members-2021-grid" class="member-grid" aria-live="polite"></div>
+              </div>
+
+              <article id="members-2022-toggle" class="glass-card" role="button" tabindex="0" aria-controls="members-2022" aria-expanded="false">
+                <h3>2022</h3>
+                <p class="muted">点击展开查看</p>
+              </article>
+              <div id="members-2022" class="collapsible" aria-hidden="true">
+                <div id="members-2022-grid" class="member-grid" aria-live="polite"></div>
+              </div>
+
+              <article id="members-2023-toggle" class="glass-card" role="button" tabindex="0" aria-controls="members-2023" aria-expanded="false">
+                <h3>2023</h3>
+                <p class="muted">点击展开查看</p>
+              </article>
+              <div id="members-2023" class="collapsible" aria-hidden="true">
+                <div id="members-2023-grid" class="member-grid" aria-live="polite"></div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- 加入我们（占位） -->
+        <section id="section-join" class="section" aria-labelledby="join-title">
+          <div class="container">
+            <div class="card-grid join-grid">
+              <article class="glass-card">
+                <h2 id="join-title">HUBUSEC</h2>
+                <p class="muted">我们长期招新，欢迎各位同学联系我们，联系时请务必带上基础的信息，包括姓名学院专业学号等，也欢迎在秋季招新时加入我们的协会管理团队，共建更好的协会</p>
+              </article>
+              <article id="org-structure-toggle" class="glass-card" role="button" tabindex="0" aria-controls="org-structure" aria-expanded="false">
+                <h2>社团架构</h2>
+                <p class="muted">我们下设年级负责人，秘书部、组织部、宣传部、技术部五大部门</p>
+              </article>
+              <div id="org-structure" class="collapsible" aria-hidden="true">
+                <div class="card-grid dept-grid">
+                  <article class="glass-card"><h3>年级负责人</h3><p class="muted">年级负责人负责沟通协调各年级事务，确保协会活动在不同年级顺利开展。</p></article>
+                  <article class="glass-card"><h3>秘书部</h3><p class="muted">秘书部负责快速响应会长指令，确保各项任务按时完成，提升社团执行力，同时细致安排活动流程，从前期准备到后期收尾，保障活动顺利进行。另外整理会议记录与资料，便于社团成员查阅，积累社团经验与知识。</p></article>
+                  <article class="glass-card"><h3>组织部</h3><p class="muted">组织部负责组织协会活动，包括组织协会成员参加比赛，组织协会成员参加活动，组织协会成员参加会议等。</p></article>
+                  <article class="glass-card"><h3>宣传部</h3><p class="muted">宣传部负责协会的宣传工作，包括协会的宣传海报，协会的宣传视频，协会的宣传文章等。</p></article>
+                  <article class="glass-card"><h3>技术部</h3><p class="muted">技术部负责协会的技术支持，包括协会的技术开发，协会的技术维护，协会的技术咨询等。</p></article>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+      </main>
+
+      <!-- 新闻详情（不切页，丝滑过渡） -->
+      <aside id="news-detail" class="news-detail" aria-hidden="true" aria-labelledby="news-detail-title" role="dialog">
+        <div class="news-detail-panel">
+          <button id="news-detail-close" class="icon-btn" aria-label="关闭详情">×</button>
+          <div class="news-detail-content">
+            <h3 id="news-detail-title"></h3>
+            <p class="news-detail-meta"></p>
+            <img class="news-detail-image" alt="新闻配图" />
+            <div class="news-detail-body"></div>
+          </div>
+        </div>
+      </aside>
+
+      <!-- 角落箭头动画层 -->
+      <div id="corner-arrows" class="corner-arrows" aria-hidden="true">
+        <div class="corner-arrow tl"></div>
+        <div class="corner-arrow tr"></div>
+        <div class="corner-arrow bl"></div>
+        <div class="corner-arrow br"></div>
+      </div>
+
+      <!-- 终端抽屉 -->
+      <aside id="terminal-overlay" class="terminal-overlay" aria-hidden="true" role="dialog" aria-label="HUBUCTF Terminal">
+        <div class="terminal-panel">
+          <div class="terminal-body">
+            <div id="terminal-output" class="terminal-output" aria-live="polite"></div>
+            <form id="terminal-form" class="terminal-form" autocomplete="off">
+              <span class="prompt">Terminal@hubuctfer:~$</span>
+              <input id="terminal-input" class="terminal-input" type="text" inputmode="text" aria-label="Terminal input" />
+            </form>
+          </div>
+        </div>
+      </aside>
+
+      <!-- 自定义鼠标与拖尾 -->
+      <div class="cursor-dot" id="cursor-dot" aria-hidden="true"></div>
+      <div class="cursor-ring" id="cursor-ring" aria-hidden="true"></div>
+      <!-- 点击粒子层（Canvas） -->
+      <canvas id="click-canvas" class="click-canvas" aria-hidden="true"></canvas>
+    </div>
+
+    <script src="js/app.js"></script>
+  </body>
+  </html>
+
