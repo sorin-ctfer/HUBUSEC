@@ -337,31 +337,58 @@
     }
   }
 
-  // 自定义鼠标与拖尾
+  // 检测设备类型
+  const isTouchDevice = 'ontouchstart' in window || navigator.maxTouchPoints > 0;
+  const isMobileDevice = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
+  
+  // 自定义鼠标与拖尾（仅在非触摸设备上启用）
   function initCustomCursor() {
-    if (!cursorDot || !cursorRing) return;
+    if (!cursorDot || !cursorRing || isTouchDevice) return;
+    
     let ringX = -100, ringY = -100;
     let dotX = -100, dotY = -100;
     let targetX = -100, targetY = -100;
     const lerp = (a, b, n) => a + (b - a) * n;
+    
     const move = (e) => {
       targetX = e.clientX; targetY = e.clientY;
       dotX = targetX; dotY = targetY;
       cursorDot.style.transform = `translate3d(${dotX - 3}px, ${dotY - 3}px, 0)`;
     };
+    
     const loop = () => {
       ringX = lerp(ringX, targetX, 0.18);
       ringY = lerp(ringY, targetY, 0.18);
       cursorRing.style.transform = `translate3d(${ringX - 14}px, ${ringY - 14}px, 0)`;
       requestAnimationFrame(loop);
     };
+    
     loop();
     window.addEventListener('mousemove', move);
-    window.addEventListener('mousedown', (e) => { cursorRing.classList.add('active'); spawnClickBurst(e.clientX, e.clientY); });
+    window.addEventListener('mousedown', (e) => { 
+      cursorRing.classList.add('active'); 
+      spawnClickBurst(e.clientX, e.clientY); 
+    });
     window.addEventListener('mouseup', () => cursorRing.classList.remove('active'));
+    
     // 进入/离开窗口
-    document.addEventListener('mouseleave', () => { cursorDot.classList.add('hide'); cursorRing.classList.add('hide'); });
-    document.addEventListener('mouseenter', () => { cursorDot.classList.remove('hide'); cursorRing.classList.remove('hide'); });
+    document.addEventListener('mouseleave', () => { 
+      cursorDot.classList.add('hide'); 
+      cursorRing.classList.add('hide'); 
+    });
+    document.addEventListener('mouseenter', () => { 
+      cursorDot.classList.remove('hide'); 
+      cursorRing.classList.remove('hide'); 
+    });
+    
+    // 触摸设备支持
+    if (isTouchDevice) {
+      window.addEventListener('touchstart', (e) => {
+        if (e.touches.length === 1) {
+          spawnClickBurst(touch.clientX, touch.clientY);
+        }
+      });
+    }
 
     // 当悬停可点击元素时，缩小环增强点击感
     const clickableSelector = 'a, button, [role="button"], .nav-item, .brand-logo';
@@ -380,8 +407,15 @@
   // 点击粒子 + logo.png 超小图爆裂效果
   function spawnClickBurst(x, y) {
     if (!clickCanvas) return;
+    
+    // 在移动设备上减少粒子数量以提高性能
+    const count = isMobileDevice ? 16 : 26;
+    const baseSpeed = isMobileDevice ? 1.8 : 2.2;
+    const life = isMobileDevice ? 600 : 700; // ms
+    
     const ctx = clickCanvas.getContext('2d');
     const dpr = Math.max(1, window.devicePixelRatio || 1);
+    
     const resize = () => {
       clickCanvas.width = Math.floor(window.innerWidth * dpr);
       clickCanvas.height = Math.floor(window.innerHeight * dpr);
@@ -389,6 +423,7 @@
       clickCanvas.style.height = window.innerHeight + 'px';
       ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
     };
+    
     if (!clickCanvas.dataset.inited) {
       resize();
       window.addEventListener('resize', resize);
@@ -399,15 +434,12 @@
     const img = new Image();
     img.src = 'statics/logo.png';
     const particles = [];
-    const count = 26;
-    const baseSpeed = 2.2;
-    const life = 700; // ms
     const start = performance.now();
 
     for (let i = 0; i < count; i++) {
       const angle = (Math.PI * 2) * (i / count) + Math.random() * 0.6;
       const speed = baseSpeed * (0.6 + Math.random() * 0.8);
-      const size = 8 + Math.random() * 10;
+      const size = isMobileDevice ? (6 + Math.random() * 8) : (8 + Math.random() * 10);
       particles.push({
         x, y,
         vx: Math.cos(angle) * speed,
@@ -426,9 +458,10 @@
       const t = now - start;
       if (t > life + 200) { cancelAnimationFrame(rafId); clear(); return; }
       clear();
+      
       // 绘制小图（更大号，随时间缩小）
       const scale = Math.max(0, 1 - t / life);
-      const iconSize = 32 + 48 * scale; // 初始 ~80px，逐步缩小到 ~32px
+      const iconSize = isMobileDevice ? (24 + 36 * scale) : (32 + 48 * scale);
       ctx.save();
       ctx.globalAlpha = 0.8 * scale;
       ctx.drawImage(img, x - iconSize / 2, y - iconSize / 2, iconSize, iconSize);
@@ -441,7 +474,8 @@
         p.vy += 0.02; // 轻微重力
         p.rotation += p.vr;
         p.alpha = Math.max(0, 1 - t / life);
-        // 画一个发光圆点模拟碎片，也可以用 img 片段
+        
+        // 画一个发光圆点模拟碎片
         ctx.save();
         ctx.globalAlpha = p.alpha;
         const grd = ctx.createRadialGradient(p.x, p.y, 0, p.x, p.y, p.size);
@@ -456,9 +490,9 @@
 
       // 轻微拖尾：记录点位，用细线条连接
       trail.push({x, y, alpha: 0.25});
-      if (trail.length > 10) trail.shift();
+      if (trail.length > (isMobileDevice ? 8 : 10)) trail.shift();
       ctx.save();
-      ctx.lineWidth = 1.2;
+      ctx.lineWidth = isMobileDevice ? 1.0 : 1.2;
       ctx.strokeStyle = 'rgba(37,99,235,0.35)';
       ctx.beginPath();
       trail.forEach((pt, i) => {
@@ -678,6 +712,462 @@
     });
   });
 
+  // 移动端触摸手势支持
+  function initTouchGestures() {
+    if (!isTouchDevice) return;
+    
+    // 防止双击缩放
+    let lastTouchEnd = 0;
+    document.addEventListener('touchend', (e) => {
+      const now = (new Date()).getTime();
+      if (now - lastTouchEnd <= 300) {
+        e.preventDefault();
+      }
+      lastTouchEnd = now;
+    }, false);
+    
+    // 防止页面滚动时的橡皮筋效果（iOS）
+    document.addEventListener('touchmove', (e) => {
+      if (e.target.closest('.terminal-output, .news-detail-content')) {
+        return; // 允许在这些元素内滚动
+      }
+      // 可以在这里添加其他触摸手势逻辑
+    }, { passive: true });
+    
+    // 优化触摸反馈
+    const touchElements = document.querySelectorAll('.nav-item, .glass-card, .news-card, .member-card');
+    touchElements.forEach(el => {
+      el.addEventListener('touchstart', () => {
+        el.style.transform = 'scale(0.98)';
+        el.style.transition = 'transform 100ms ease';
+      });
+      
+      el.addEventListener('touchend', () => {
+        el.style.transform = '';
+        el.style.transition = '';
+      });
+    });
+    
+    // 添加触摸手势支持
+    let startY = 0;
+    let startX = 0;
+    
+    document.addEventListener('touchstart', (e) => {
+      if (e.touches.length === 1) {
+        startY = e.touches[0].clientY;
+        startX = e.touches[0].clientX;
+      }
+    }, { passive: true });
+    
+    document.addEventListener('touchend', (e) => {
+      if (e.touches.length === 0) {
+        const endY = e.changedTouches[0].clientY;
+        const endX = e.changedTouches[0].clientX;
+        const deltaY = startY - endY;
+        const deltaX = startX - endX;
+        
+        // 检测向上滑动（可以用于快速导航）
+        if (Math.abs(deltaY) > 50 && Math.abs(deltaY) > Math.abs(deltaX)) {
+          if (deltaY > 0) {
+            // 向上滑动 - 可以添加快速导航逻辑
+            console.log('向上滑动');
+          }
+        }
+      }
+    }, { passive: true });
+    
+    // 优化触摸滚动体验
+    const scrollableElements = document.querySelectorAll('.terminal-output, .news-detail-content');
+    scrollableElements.forEach(el => {
+      el.addEventListener('touchstart', () => {
+        el.style.webkitOverflowScrolling = 'touch';
+      }, { passive: true });
+    });
+  }
+  
+  // 移动端性能优化
+  function optimizeForMobile() {
+    // 检测是否为移动设备
+    const isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent) || 
+                     ('ontouchstart' in window) || 
+                     (navigator.maxTouchPoints > 0);
+    
+    if (!isMobile) return;
+
+    console.log('🔄 移动端优化已启用');
+
+    // 移动端性能优化
+    if (flowBands) {
+      // 移动端降低动画复杂度
+      flowBands.style.setProperty('--band-speed', '32s');
+      setSideSpeed('32s');
+      setSideSpeedScale(0.8);
+    }
+
+    // 移动端触摸优化
+    document.body.classList.add('mobile-device');
+    
+    // 显示移动端状态
+    const mobileStatus = document.querySelector('.mobile-status');
+    if (mobileStatus) {
+      mobileStatus.classList.remove('hidden');
+    }
+    
+    // 优化触摸反馈
+    const touchableElements = document.querySelectorAll('.nav-item, .glass-card, .news-card, .member-card, [role="button"]');
+    touchableElements.forEach(el => {
+      el.addEventListener('touchstart', function(e) {
+        this.style.transform = 'scale(0.98)';
+        this.style.transition = 'transform 0.1s ease';
+        
+        // 创建触摸涟漪效果
+        createTouchRipple(e.touches[0].clientX, e.touches[0].clientY, this);
+      }, { passive: true });
+      
+      el.addEventListener('touchend', function() {
+        this.style.transform = '';
+        this.style.transition = '';
+      }, { passive: true });
+    });
+    
+    // 触摸涟漪效果
+    function createTouchRipple(x, y, element) {
+      const ripple = document.createElement('div');
+      ripple.className = 'touch-ripple';
+      ripple.style.left = (x - element.getBoundingClientRect().left) + 'px';
+      ripple.style.top = (y - element.getBoundingClientRect().top) + 'px';
+      
+      element.style.position = 'relative';
+      element.appendChild(ripple);
+      
+      setTimeout(() => {
+        ripple.remove();
+      }, 600);
+    }
+
+    // 移动端滚动优化
+    let isScrolling = false;
+    let scrollTimer;
+    
+    const handleScroll = () => {
+      isScrolling = true;
+      clearTimeout(scrollTimer);
+      scrollTimer = setTimeout(() => {
+        isScrolling = false;
+      }, 150);
+    };
+    
+    window.addEventListener('scroll', handleScroll, { passive: true });
+
+    // 移动端双击缩放禁用
+    let lastTouchEnd = 0;
+    document.addEventListener('touchend', function (event) {
+      const now = (new Date()).getTime();
+      if (now - lastTouchEnd <= 300) {
+        event.preventDefault();
+      }
+      lastTouchEnd = now;
+    }, false);
+
+    // 移动端键盘优化
+    if (terminalInput) {
+      terminalInput.addEventListener('focus', function() {
+        // 移动端输入框聚焦时滚动到可视区域
+        setTimeout(() => {
+          this.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        }, 300);
+      });
+    }
+
+
+
+    // 移动端状态栏优化
+    if ('standalone' in window.navigator && window.navigator.standalone) {
+      // iOS PWA 模式
+      document.body.classList.add('pwa-mode');
+    }
+
+    // 移动端电池优化
+    if ('getBattery' in navigator) {
+      navigator.getBattery().then(battery => {
+        if (battery.level < 0.2) {
+          // 低电量时降低动画复杂度
+          document.body.classList.add('low-battery');
+          if (flowBands) {
+            flowBands.style.setProperty('--band-speed', '40s');
+            setSideSpeed('40s');
+            setSideSpeedScale(0.6);
+          }
+          
+          // 更新电池状态显示
+          const batteryStatus = document.querySelector('.battery-status');
+          if (batteryStatus) {
+            batteryStatus.textContent = `🔋 电量低 (${Math.round(battery.level * 100)}%)`;
+            batteryStatus.style.background = 'rgba(239, 68, 68, 0.9)';
+          }
+        } else {
+          // 更新电池状态显示
+          const batteryStatus = document.querySelector('.battery-status');
+          if (batteryStatus) {
+            batteryStatus.textContent = `🔋 电量充足 (${Math.round(battery.level * 100)}%)`;
+            batteryStatus.style.background = 'rgba(16, 185, 129, 0.9)';
+          }
+        }
+        
+        // 监听电池状态变化
+        battery.addEventListener('levelchange', () => {
+          if (battery.level < 0.2) {
+            document.body.classList.add('low-battery');
+            const batteryStatus = document.querySelector('.battery-status');
+            if (batteryStatus) {
+              batteryStatus.textContent = `🔋 电量低 (${Math.round(battery.level * 100)}%)`;
+              batteryStatus.style.background = 'rgba(239, 68, 68, 0.9)';
+            }
+          } else {
+            document.body.classList.remove('low-battery');
+            const batteryStatus = document.querySelector('.battery-status');
+            if (batteryStatus) {
+              batteryStatus.textContent = `🔋 电量充足 (${Math.round(battery.level * 100)}%)`;
+              batteryStatus.style.background = 'rgba(16, 185, 129, 0.9)';
+            }
+          }
+        });
+      });
+    }
+
+    // 移动端网络优化
+    if ('connection' in navigator) {
+      const connection = navigator.connection;
+      const updateNetworkStatus = () => {
+        const networkStatus = document.querySelector('.network-status');
+        if (networkStatus) {
+          if (connection.effectiveType === 'slow-2g' || connection.effectiveType === '2g') {
+            // 慢网络时禁用复杂动画
+            document.body.classList.add('slow-network');
+            if (flowBands) {
+              flowBands.style.opacity = '0.3';
+            }
+            networkStatus.textContent = `📶 网络较慢 (${connection.effectiveType})`;
+            networkStatus.style.background = 'rgba(239, 68, 68, 0.9)';
+          } else if (connection.effectiveType === '3g') {
+            networkStatus.textContent = `📶 网络一般 (${connection.effectiveType})`;
+            networkStatus.style.background = 'rgba(245, 158, 11, 0.9)';
+          } else {
+            networkStatus.textContent = `📶 网络良好 (${connection.effectiveType})`;
+            networkStatus.style.background = 'rgba(37, 99, 235, 0.9)';
+          }
+        }
+      };
+      
+      updateNetworkStatus();
+      connection.addEventListener('change', updateNetworkStatus);
+    }
+    
+    // 移动端性能监控
+    let frameCount = 0;
+    let lastTime = performance.now();
+    let fps = 60;
+    
+    function updatePerformance() {
+      frameCount++;
+      const currentTime = performance.now();
+      
+      if (currentTime - lastTime >= 1000) {
+        fps = Math.round((frameCount * 1000) / (currentTime - lastTime));
+        frameCount = 0;
+        lastTime = currentTime;
+        
+        // 更新性能提示
+        const performanceHint = document.querySelector('.performance-hint');
+        if (performanceHint) {
+          if (fps < 30) {
+            performanceHint.textContent = `⚡ 性能较低 (${fps}fps)`;
+            performanceHint.style.background = 'rgba(239, 68, 68, 0.9)';
+            // 降低动画复杂度
+            if (flowBands) {
+              flowBands.style.opacity = '0.4';
+            }
+          } else if (fps < 50) {
+            performanceHint.textContent = `⚡ 性能一般 (${fps}fps)`;
+            performanceHint.style.background = 'rgba(245, 158, 11, 0.9)';
+          } else {
+            performanceHint.textContent = `⚡ 性能良好 (${fps}fps)`;
+            performanceHint.style.background = 'rgba(16, 185, 129, 0.9)';
+          }
+        }
+      }
+      
+      requestAnimationFrame(updatePerformance);
+    }
+    
+    // 启动性能监控
+    updatePerformance();
+    
+    // 移动端资源加载优化
+    if ('IntersectionObserver' in window) {
+      // 图片懒加载
+      const imageObserver = new IntersectionObserver((entries, observer) => {
+        entries.forEach(entry => {
+          if (entry.isIntersecting) {
+            const img = entry.target;
+            if (img.dataset.src) {
+              img.src = img.dataset.src;
+              img.removeAttribute('data-src');
+              observer.unobserve(img);
+            }
+          }
+        });
+      });
+      
+      // 观察所有图片
+      document.querySelectorAll('img[data-src]').forEach(img => {
+        imageObserver.observe(img);
+      });
+    }
+    
+    // 移动端预加载优化
+    if ('connection' in navigator) {
+      const connection = navigator.connection;
+      if (connection.effectiveType === '4g' || connection.effectiveType === '5g') {
+        // 高速网络时预加载资源
+        const preloadLinks = [
+          'statics/bg.jpg',
+          'statics/logofinal.png',
+          'statics/logo.png'
+        ];
+        
+        preloadLinks.forEach(src => {
+          const link = document.createElement('link');
+          link.rel = 'preload';
+          link.as = 'image';
+          link.href = src;
+          document.head.appendChild(link);
+        });
+      }
+    }
+    
+    // 内存使用监控
+    if ('memory' in performance) {
+      setInterval(() => {
+        const memory = performance.memory;
+        const usedMB = Math.round(memory.usedJSHeapSize / 1024 / 1024);
+        const totalMB = Math.round(memory.totalJSHeapSize / 1024 / 1024);
+        
+        if (usedMB > totalMB * 0.8) {
+          // 内存使用过高时优化
+          console.warn('内存使用过高，正在优化...');
+          if (flowBands) {
+            flowBands.style.opacity = '0.3';
+          }
+        }
+      }, 5000);
+    }
+    
+    // 移动端错误处理
+    window.addEventListener('error', function(e) {
+      console.error('页面错误:', e.error);
+      
+      // 显示错误提示
+      const errorHint = document.createElement('div');
+      errorHint.className = 'error-hint';
+      errorHint.textContent = '⚠️ 页面出现错误，请刷新重试';
+      errorHint.style.cssText = `
+        position: fixed;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        background: rgba(239, 68, 68, 0.9);
+        color: white;
+        padding: 12px 20px;
+        border-radius: 8px;
+        font-size: 14px;
+        z-index: 10000;
+        text-align: center;
+      `;
+      
+      document.body.appendChild(errorHint);
+      
+      setTimeout(() => {
+        errorHint.remove();
+      }, 5000);
+    });
+    
+    // 移动端离线支持
+    window.addEventListener('online', function() {
+      console.log('网络已连接');
+      document.body.classList.remove('offline');
+      
+      // 显示网络恢复提示
+      const onlineHint = document.createElement('div');
+      onlineHint.className = 'online-hint';
+      onlineHint.textContent = '✅ 网络已恢复';
+      onlineHint.style.cssText = `
+        position: fixed;
+        top: 20px;
+        right: 20px;
+        background: rgba(16, 185, 129, 0.9);
+        color: white;
+        padding: 8px 16px;
+        border-radius: 6px;
+        font-size: 12px;
+        z-index: 10000;
+      `;
+      
+      document.body.appendChild(onlineHint);
+      
+      setTimeout(() => {
+        onlineHint.remove();
+      }, 3000);
+    });
+    
+    window.addEventListener('offline', function() {
+      console.log('网络已断开');
+      document.body.classList.add('offline');
+      
+      // 显示离线提示
+      const offlineHint = document.createElement('div');
+      offlineHint.className = 'offline-hint';
+      offlineHint.textContent = '📡 网络已断开，部分功能可能受限';
+      offlineHint.style.cssText = `
+        position: fixed;
+        top: 20px;
+        right: 20px;
+        background: rgba(239, 68, 68, 0.9);
+        color: white;
+        padding: 8px 16px;
+        border-radius: 6px;
+        font-size: 12px;
+        z-index: 10000;
+        max-width: 200px;
+        text-align: center;
+      `;
+      
+      document.body.appendChild(offlineHint);
+      
+      // 离线时降低动画复杂度
+      if (flowBands) {
+        flowBands.style.opacity = '0.2';
+      }
+    });
+    
+    // 移动端页面可见性优化
+    document.addEventListener('visibilitychange', function() {
+      if (document.hidden) {
+        // 页面不可见时暂停动画
+        if (flowBands) {
+          flowBands.style.animationPlayState = 'paused';
+        }
+      } else {
+        // 页面可见时恢复动画
+        if (flowBands) {
+          flowBands.style.animationPlayState = 'running';
+        }
+      }
+    });
+    
+    console.log('✅ 移动端优化完成');
+  }
+  
   // 启动
   bindTerminalTriggers();
   renderNewsList();
@@ -685,6 +1175,8 @@
   bindMembersCollapse();
   bindJoinCollapse();
   initCustomCursor();
+  initTouchGestures();
+  optimizeForMobile();
   runIntroAnimation();
 })();
 
