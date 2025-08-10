@@ -587,3 +587,948 @@ body {
 @media (min-width: 640px) { .member-card { grid-column: span 6; } }
 @media (min-width: 960px) { .member-card { grid-column: span 4; } }
 
+/* ===== 移动端响应式优化 ===== */
+
+/* 基础移动端优化 */
+@media (max-width: 768px) {
+  /* 调整根字体大小，确保移动端可读性 */
+  html { font-size: 14px; }
+  
+  /* 优化容器间距 */
+  .container { padding: 6px 0 14px; }
+  .main { padding: 0 16px 30px; margin: 16px auto; }
+  
+  /* 调整卡片间距 */
+  .card-grid { gap: 12px; }
+  .glass-card { padding: 14px 16px; }
+  
+  /* 优化头部布局 */
+  .header-inner { 
+    padding: 12px 16px; 
+    margin-top: 8vh;
+    gap: 8px;
+  }
+  
+  /* 调整LOGO大小 */
+  .brand-logo { 
+    height: clamp(280px, 50vh, 600px);
+    max-width: 90vw;
+  }
+  
+  /* 优化导航按钮 */
+  .main-nav { 
+    gap: 4px; 
+    flex-wrap: wrap;
+    justify-content: center;
+    max-width: 100%;
+  }
+  
+  .nav-item {
+    padding: 6px 12px;
+    font-size: 13px;
+    white-space: nowrap;
+    min-width: 60px;
+    text-align: center;
+  }
+  
+  /* 调整流动文字特效在移动端的表现 */
+  .band-top {
+    top: 16px;
+    height: clamp(48px, 8vw, 80px);
+  }
+  
+  .band-left, .band-right {
+    width: clamp(80px, 10vw, 160px);
+  }
+  
+  .band-top .band-inner {
+    font-size: clamp(36px, 7vw, 72px);
+  }
+  
+  .band-left .band-inner, .band-right .band-inner {
+    font-size: clamp(32px, 6vh, 64px);
+  }
+  
+  /* 优化新闻卡片在移动端的布局 */
+  .news-card {
+    grid-template-columns: 1fr;
+    gap: 12px;
+    padding: 12px;
+  }
+  
+  .news-cover {
+    height: 200px;
+    width: 100%;
+  }
+  
+  .news-content {
+    text-align: center;
+    gap: 8px;
+  }
+  
+  .news-title {
+    font-size: 16px;
+    margin: 0 0 4px 0;
+  }
+  
+  /* 优化成员卡片在移动端的布局 */
+  .member-card {
+    grid-template-columns: 60px 1fr;
+    gap: 10px;
+    padding: 10px 12px;
+  }
+  
+  .member-avatar {
+    width: 60px;
+    height: 60px;
+  }
+  
+  .member-name {
+    font-size: 14px;
+  }
+  
+  .member-desc {
+    font-size: 12px;
+  }
+  
+  /* 优化终端在移动端的显示 */
+  .terminal-panel {
+    width: 96vw;
+    height: 80vh;
+    border-radius: 16px 16px 0 0;
+  }
+  
+  .terminal-output {
+    padding: 12px 14px 8px;
+    font-size: 13px;
+  }
+  
+  .terminal-form {
+    padding: 6px 10px 12px 10px;
+  }
+  
+  /* 优化新闻详情在移动端的显示 */
+  .news-detail-panel {
+    width: 96vw;
+    max-height: 85vh;
+    border-radius: 20px 20px 0 0;
+  }
+  
+  .news-detail-content {
+    padding: 18px 16px 20px;
+  }
+  
+  .news-detail-image {
+    max-height: 280px;
+  }
+  
+  /* 优化角落箭头在移动端的位置 */
+  .corner-arrow {
+    width: 20px;
+    height: 20px;
+  }
+  
+  .corner-arrow.tl { left: 12px; top: 12px; }
+  .corner-arrow.tr { right: 12px; top: 12px; }
+  .corner-arrow.bl { left: 12px; bottom: 12px; }
+  .corner-arrow.br { right: 12px; bottom: 12px; }
+}
+
+/* 小屏幕手机优化 */
+@media (max-width: 480px) {
+  html { font-size: 13px; }
+  
+  .main { padding: 0 12px 24px; margin: 12px auto; }
+  .container { padding: 4px 0 12px; }
+  
+  .header-inner {
+    padding: 10px 12px;
+    margin-top: 6vh;
+  }
+  
+  .brand-logo {
+    height: clamp(240px, 45vh, 500px);
+    max-width: 85vw;
+  }
+  
+  .nav-item {
+    padding: 5px 10px;
+    font-size: 12px;
+    min-width: 50px;
+  }
+  
+  .glass-card {
+    padding: 12px 14px;
+  }
+  
+  .card-grid {
+    gap: 10px;
+  }
+  
+  /* 进一步优化流动文字特效 */
+  .band-top {
+    top: 12px;
+    height: clamp(40px, 6vw, 64px);
+  }
+  
+  .band-left, .band-right {
+    width: clamp(60px, 8vw, 120px);
+  }
+  
+  .band-top .band-inner {
+    font-size: clamp(28px, 5.5vw, 56px);
+  }
+  
+  .band-left .band-inner, .band-right .band-inner {
+    font-size: clamp(24px, 5vh, 48px);
+  }
+  
+  /* 优化新闻卡片 */
+  .news-card {
+    padding: 10px;
+    gap: 10px;
+  }
+  
+  .news-cover {
+    height: 180px;
+  }
+  
+  .news-title {
+    font-size: 15px;
+  }
+  
+  /* 优化成员卡片 */
+  .member-card {
+    grid-template-columns: 50px 1fr;
+    gap: 8px;
+    padding: 8px 10px;
+  }
+  
+  .member-avatar {
+    width: 50px;
+    height: 50px;
+  }
+  
+  .member-name {
+    font-size: 13px;
+  }
+  
+  .member-desc {
+    font-size: 11px;
+  }
+  
+  /* 优化终端 */
+  .terminal-panel {
+    width: 98vw;
+    height: 85vh;
+  }
+  
+  .terminal-output {
+    padding: 10px 12px 6px;
+    font-size: 12px;
+  }
+  
+  .terminal-form {
+    padding: 5px 8px 10px 8px;
+  }
+  
+  /* 优化新闻详情 */
+  .news-detail-panel {
+    width: 98vw;
+    max-height: 90vh;
+  }
+  
+  .news-detail-content {
+    padding: 16px 14px 18px;
+  }
+  
+  .news-detail-image {
+    max-height: 240px;
+  }
+}
+
+/* 超小屏幕优化 */
+@media (max-width: 360px) {
+  html { font-size: 12px; }
+  
+  .main { padding: 0 10px 20px; margin: 10px auto; }
+  
+  .header-inner {
+    padding: 8px 10px;
+    margin-top: 5vh;
+  }
+  
+  .brand-logo {
+    height: clamp(200px, 40vh, 400px);
+    max-width: 80vw;
+  }
+  
+  .nav-item {
+    padding: 4px 8px;
+    font-size: 11px;
+    min-width: 45px;
+  }
+  
+  .glass-card {
+    padding: 10px 12px;
+  }
+  
+  .card-grid {
+    gap: 8px;
+  }
+  
+  /* 流动文字特效最小化 */
+  .band-top {
+    top: 8px;
+    height: clamp(32px, 5vw, 48px);
+  }
+  
+  .band-left, .band-right {
+    width: clamp(50px, 6vw, 100px);
+  }
+  
+  .band-top .band-inner {
+    font-size: clamp(24px, 4.5vw, 44px);
+  }
+  
+  .band-left .band-inner, .band-right .band-inner {
+    font-size: clamp(20px, 4vh, 40px);
+  }
+  
+  .news-card {
+    padding: 8px;
+    gap: 8px;
+  }
+  
+  .news-cover {
+    height: 160px;
+  }
+  
+  .member-card {
+    grid-template-columns: 45px 1fr;
+    gap: 6px;
+    padding: 6px 8px;
+  }
+  
+  .member-avatar {
+    width: 45px;
+    height: 45px;
+  }
+}
+
+/* 横屏模式优化 */
+@media (max-height: 500px) and (orientation: landscape) {
+  .header-inner {
+    margin-top: 4vh;
+    gap: 6px;
+  }
+  
+  .brand-logo {
+    height: clamp(200px, 35vh, 400px);
+  }
+  
+  .main-nav {
+    gap: 3px;
+  }
+  
+  .nav-item {
+    padding: 4px 10px;
+    font-size: 12px;
+  }
+  
+  .main {
+    margin: 12px auto;
+    padding: 0 16px 20px;
+  }
+  
+  .section {
+    margin-bottom: 16px;
+  }
+}
+
+/* 触摸设备优化 */
+@media (hover: none) and (pointer: coarse) {
+  /* 禁用自定义鼠标在触摸设备上 */
+  .cursor-dot, .cursor-ring {
+    display: none !important;
+  }
+  
+  /* 恢复默认光标 */
+  body {
+    cursor: auto;
+  }
+  
+  [role="button"], button, a, .brand-logo {
+    cursor: pointer;
+  }
+  
+  /* 优化触摸交互 */
+  .nav-item, .glass-card, .news-card, .member-card {
+    -webkit-tap-highlight-color: rgba(37, 99, 235, 0.1);
+    touch-action: manipulation;
+  }
+  
+  /* 触摸反馈效果 */
+  .nav-item:active,
+  .glass-card:active,
+  .news-card:active,
+  .member-card:active {
+    transform: scale(0.98);
+    transition: transform 100ms ease;
+  }
+  
+  /* 优化触摸滚动 */
+  .terminal-output,
+  .news-detail-content {
+    -webkit-overflow-scrolling: touch;
+    scroll-behavior: smooth;
+  }
+  
+  /* 触摸设备上的悬停效果替代 */
+  .glass-card:hover,
+  .news-card:hover,
+  .member-card:hover {
+    transform: none;
+    box-shadow: 0 10px 30px rgba(17,24,39,0.08);
+    border-color: rgba(255,255,255,0.18);
+    background: linear-gradient(180deg, rgba(255,255,255,0.08), rgba(255,255,255,0.04));
+  }
+  
+  .nav-item:hover {
+    transform: none;
+  }
+  
+  .brand-logo:hover {
+    transform: none;
+    filter: none;
+  }
+}
+
+/* 高分辨率屏幕优化 */
+@media (-webkit-min-device-pixel-ratio: 2), (min-resolution: 192dpi) {
+  .glass-card,
+  .news-card,
+  .member-card {
+    border-width: 0.5px;
+  }
+  
+  .nav-item {
+    border-width: 0.5px;
+  }
+}
+
+/* 减少动画（用户偏好） */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+  
+  .flow-bands {
+    animation-play-state: paused;
+  }
+  
+  .corner-arrows.show .corner-arrow {
+    animation: none;
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+/* 深色模式支持 */
+@media (prefers-color-scheme: dark) {
+  :root {
+    --bg: #0f172a;
+    --bg-2: #1e293b;
+    --text: #f1f5f9;
+    --text-muted: #cbd5e1;
+    --card: rgba(30, 41, 59, 0.8);
+    --card-2: rgba(15, 23, 42, 0.6);
+    --border: rgba(148, 163, 184, 0.2);
+    --shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+  }
+  
+  .glass-card,
+  .news-card,
+  .member-card {
+    background: linear-gradient(180deg, rgba(30, 41, 59, 0.8), rgba(15, 23, 42, 0.6));
+    border-color: rgba(148, 163, 184, 0.2);
+  }
+  
+  .news-detail-panel {
+    background: linear-gradient(180deg, rgba(30, 41, 59, 0.94), rgba(15, 23, 42, 0.9));
+  }
+}
+
+
+
+/* 打印样式优化 */
+@media print {
+  .flow-bands,
+  .hero,
+  .corner-arrows,
+  .terminal-overlay,
+  .cursor-dot,
+  .cursor-ring,
+  .click-canvas {
+    display: none !important;
+  }
+  
+  .page-bg {
+    filter: none;
+    transform: none;
+  }
+  
+  .glass-card,
+  .news-card,
+  .member-card {
+    box-shadow: none;
+    border: 1px solid #ccc;
+    break-inside: avoid;
+  }
+  
+  .site-header {
+    min-height: auto;
+    margin-bottom: 20px;
+  }
+  
+  .brand-logo {
+    height: 120px;
+  }
+}
+
+/* 移动端触摸优化 */
+.mobile-device .glass-card,
+.mobile-device .nav-item,
+.mobile-device .news-card,
+.mobile-device .member-card {
+  -webkit-tap-highlight-color: transparent;
+  touch-action: manipulation;
+  user-select: none;
+}
+
+.mobile-device .glass-card:active,
+.mobile-device .nav-item:active,
+.mobile-device .news-card:active,
+.mobile-device .member-card:active {
+  transform: scale(0.98);
+  transition: transform 0.1s ease;
+}
+
+
+
+/* 移动端PWA模式优化 */
+.pwa-mode .site-header {
+  padding-top: env(safe-area-inset-top);
+}
+
+.pwa-mode .main {
+  padding-bottom: env(safe-area-inset-bottom);
+}
+
+/* 低电量模式 */
+.low-battery .flow-bands {
+  opacity: 0.4;
+}
+
+.low-battery .corner-arrows {
+  opacity: 0.3;
+}
+
+/* 慢网络模式 */
+.slow-network .flow-bands {
+  animation-play-state: paused;
+}
+
+.slow-network .corner-arrows {
+  display: none;
+}
+
+/* 移动端滚动条优化 */
+.mobile-device ::-webkit-scrollbar {
+  width: 4px;
+  height: 4px;
+}
+
+.mobile-device ::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.mobile-device ::-webkit-scrollbar-thumb {
+  background: rgba(37, 99, 235, 0.3);
+  border-radius: 2px;
+}
+
+.mobile-device ::-webkit-scrollbar-thumb:hover {
+  background: rgba(37, 99, 235, 0.5);
+}
+
+/* 移动端输入优化 */
+.mobile-device input,
+.mobile-device textarea {
+  font-size: 16px; /* 防止iOS缩放 */
+  -webkit-appearance: none;
+  border-radius: 0;
+}
+
+.mobile-device .terminal-input {
+  font-size: 14px;
+}
+
+/* 移动端触摸区域优化 */
+.mobile-device .nav-item {
+  min-height: 44px;
+  min-width: 44px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.mobile-device .glass-card[role="button"] {
+  min-height: 60px;
+  cursor: pointer;
+}
+
+/* 移动端动画性能优化 */
+@media (max-width: 768px) {
+  .flow-bands {
+    will-change: auto;
+  }
+  
+  .corner-arrows {
+    will-change: auto;
+  }
+  
+  .glass-card {
+    will-change: auto;
+  }
+}
+
+/* 移动端深色模式优化 */
+
+
+/* 移动端横屏优化 */
+@media (max-height: 500px) and (orientation: landscape) {
+  .mobile-device .site-header {
+    padding: 8px 16px;
+  }
+  
+  .mobile-device .main {
+    margin: 8px auto;
+    padding: 0 16px 16px;
+  }
+  
+  .mobile-device .flow-bands {
+    opacity: 0.2;
+  }
+  
+  .mobile-device .corner-arrows {
+    display: none;
+  }
+}
+
+/* 移动端超小屏幕优化 */
+@media (max-width: 320px) {
+  .mobile-device .header-inner {
+    padding: 8px 12px;
+  }
+  
+  .mobile-device .brand-logo {
+    width: 32px;
+    height: 32px;
+  }
+  
+  .mobile-device .nav-item {
+    font-size: 11px;
+    padding: 6px 8px;
+    min-width: 36px;
+    min-height: 36px;
+  }
+  
+  .mobile-device .main {
+    padding: 0 8px 16px;
+    margin: 8px auto;
+  }
+  
+  .mobile-device .container {
+    padding: 4px 0 8px;
+  }
+  
+  .mobile-device .glass-card {
+    padding: 12px 12px;
+  }
+  
+  .mobile-device .card-grid {
+    gap: 8px;
+  }
+}
+
+/* 移动端触摸反馈动画 */
+@keyframes touchRipple {
+  0% {
+    transform: scale(0);
+    opacity: 0.6;
+  }
+  100% {
+    transform: scale(2);
+    opacity: 0;
+  }
+}
+
+.mobile-device .touch-ripple {
+  position: absolute;
+  border-radius: 50%;
+  background: rgba(37, 99, 235, 0.3);
+  pointer-events: none;
+  animation: touchRipple 0.6s ease-out;
+}
+
+/* 移动端加载状态优化 */
+.mobile-device .loading-indicator {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+  color: var(--text-muted);
+}
+
+.mobile-device .loading-spinner {
+  width: 20px;
+  height: 20px;
+  border: 2px solid var(--border);
+  border-top-color: var(--brand);
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+  margin-right: 8px;
+}
+
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+/* 移动端无障碍优化 */
+.mobile-device .sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+/* 移动端焦点管理 */
+.mobile-device .glass-card:focus-visible,
+.mobile-device .nav-item:focus-visible {
+  outline: 2px solid var(--brand);
+  outline-offset: 2px;
+}
+
+/* 移动端触摸延迟优化 */
+.mobile-device * {
+  touch-action: manipulation;
+}
+
+/* 移动端字体渲染优化 */
+.mobile-device {
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  text-rendering: optimizeLegibility;
+}
+
+/* 移动端图片优化 */
+.mobile-device img {
+  max-width: 100%;
+  height: auto;
+  display: block;
+}
+
+/* 移动端链接优化 */
+.mobile-device a {
+  -webkit-tap-highlight-color: rgba(37, 99, 235, 0.3);
+}
+
+/* 移动端表单优化 */
+.mobile-device form {
+  -webkit-user-select: none;
+  user-select: none;
+}
+
+/* 移动端选择文本优化 */
+.mobile-device .selectable {
+  -webkit-user-select: text;
+  user-select: text;
+}
+
+/* 移动端滚动优化 */
+.mobile-device .smooth-scroll {
+  -webkit-overflow-scrolling: touch;
+  scroll-behavior: smooth;
+}
+
+/* 移动端性能监控提示 */
+.mobile-device .performance-hint {
+  position: fixed;
+  top: 10px;
+  right: 10px;
+  background: rgba(0, 0, 0, 0.7);
+  color: white;
+  padding: 4px 8px;
+  border-radius: 4px;
+  font-size: 10px;
+  z-index: 1000;
+  opacity: 0.8;
+}
+
+/* 移动端网络状态提示 */
+.mobile-device .network-status {
+  position: fixed;
+  top: 10px;
+  left: 10px;
+  background: rgba(37, 99, 235, 0.9);
+  color: white;
+  padding: 4px 8px;
+  border-radius: 4px;
+  font-size: 10px;
+  z-index: 1000;
+  opacity: 0.8;
+}
+
+/* 移动端电池状态提示 */
+.mobile-device .battery-status {
+  position: fixed;
+  top: 40px;
+  left: 10px;
+  background: rgba(16, 185, 129, 0.9);
+  color: white;
+  padding: 4px 8px;
+  border-radius: 4px;
+  font-size: 10px;
+  z-index: 1000;
+  opacity: 0.8;
+}
+
+.low-battery .battery-status {
+  background: rgba(239, 68, 68, 0.9);
+}
+
+/* 离线状态样式 */
+.offline .flow-bands {
+  opacity: 0.2;
+  animation-play-state: paused;
+}
+
+.offline .corner-arrows {
+  opacity: 0.2;
+}
+
+.offline .glass-card {
+  opacity: 0.8;
+}
+
+/* 错误提示样式 */
+.error-hint {
+  animation: slideIn 0.3s ease-out;
+}
+
+@keyframes slideIn {
+  from {
+    opacity: 0;
+    transform: translate(-50%, -50%) scale(0.8);
+  }
+  to {
+    opacity: 1;
+    transform: translate(-50%, -50%) scale(1);
+  }
+}
+
+/* 在线/离线提示样式 */
+.online-hint,
+.offline-hint {
+  animation: slideInRight 0.3s ease-out;
+}
+
+@keyframes slideInRight {
+  from {
+    opacity: 0;
+    transform: translateX(100%);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+/* 移动端触摸反馈增强 */
+.mobile-device .glass-card:active::after,
+.mobile-device .nav-item:active::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(37, 99, 235, 0.1);
+  border-radius: inherit;
+  pointer-events: none;
+}
+
+/* 移动端加载状态 */
+.mobile-device .loading-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(255, 255, 255, 0.9);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 10000;
+}
+
+.mobile-device .loading-spinner-large {
+  width: 40px;
+  height: 40px;
+  border: 3px solid var(--border);
+  border-top-color: var(--brand);
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+}
+
+/* 移动端无障碍增强 */
+.mobile-device .focus-visible {
+  outline: 2px solid var(--brand);
+  outline-offset: 2px;
+}
+
+/* 移动端深色模式适配 */
+@media (prefers-color-scheme: dark) {
+  .mobile-device .loading-overlay {
+    background: rgba(0, 0, 0, 0.9);
+  }
+  
+  .mobile-device .error-hint,
+  .mobile-device .online-hint,
+  .mobile-device .offline-hint {
+    backdrop-filter: blur(10px);
+  }
+}
+
+/* 移动端打印样式 */
+@media print {
+  .mobile-device .mobile-status,
+  .mobile-device .error-hint,
+  .mobile-device .online-hint,
+  .mobile-device .offline-hint {
+    display: none !important;
+  }
+}
+
