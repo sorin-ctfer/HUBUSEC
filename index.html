@@ -1,0 +1,411 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover" />
+    <meta name="theme-color" content="#f2f2f2" />
+    <title>HUBUSEC - 一直热爱，一直坚持</title>
+    <link rel="preload" as="image" href="static/logo.png" />
+    <link rel="stylesheet" href="style.css" />
+  </head>
+  <body>
+    <div id="app">
+      <!-- 加载界面 -->
+      <section id="loader" class="stage stage--loader" aria-hidden="false">
+        <div class="glass-bg" aria-hidden="true"></div>
+
+        <!-- 加载界面彩色空心大字背景 -->
+        <div class="loader-bg-backdrop" aria-hidden="true">
+          <div class="loader-bg-text">HUBUSEC</div>
+          <div class="loader-bg-text">HUBUSEC</div>
+          <div class="loader-bg-text">HUBUSEC</div>
+          <div class="loader-bg-text">HUBUSEC</div>
+          <div class="loader-bg-text">HUBUSEC</div>
+          <div class="loader-bg-text">HUBUSEC</div>
+        </div>
+
+        <!-- 背景空心大字 -->
+        <div class="loader-backdrop-title" aria-hidden="true">HUBUSEC</div>
+
+        <!-- 丝线特效（SVG） -->
+        <svg class="silk" viewBox="0 0 1000 400" preserveAspectRatio="xMidYMid slice" aria-hidden="true">
+          <defs>
+            <linearGradient id="gradA" x1="0%" y1="0%" x2="100%" y2="0%">
+              <stop offset="0%" stop-color="#ff7a7a" />
+              <stop offset="50%" stop-color="#ffb36b" />
+              <stop offset="100%" stop-color="#ffd86b" />
+            </linearGradient>
+            <linearGradient id="gradB" x1="0%" y1="0%" x2="100%" y2="0%">
+              <stop offset="0%" stop-color="#7aa8ff" />
+              <stop offset="50%" stop-color="#7affd4" />
+              <stop offset="100%" stop-color="#b9ff7a" />
+            </linearGradient>
+            <linearGradient id="gradC" x1="0%" y1="0%" x2="100%" y2="0%">
+              <stop offset="0%" stop-color="#a77aff" />
+              <stop offset="50%" stop-color="#ff7ae7" />
+              <stop offset="100%" stop-color="#ff7ab8" />
+            </linearGradient>
+            <filter id="softGlow" x="-20%" y="-20%" width="140%" height="140%">
+              <feGaussianBlur stdDeviation="2" result="blur" />
+              <feMerge>
+                <feMergeNode in="blur" />
+                <feMergeNode in="SourceGraphic" />
+              </feMerge>
+            </filter>
+          </defs>
+
+          <g class="silk-group silk-group--left">
+            <path class="silk-line" stroke="url(#gradA)" d="M-50,300 C200,200 350,260 500,200 C650,140 800,180 1050,120" />
+            <path class="silk-line" stroke="url(#gradB)" d="M-50,230 C200,160 350,210 500,180 C650,150 800,140 1050,100" />
+            <path class="silk-line" stroke="url(#gradC)" d="M-50,150 C200,120 350,160 500,160 C650,160 800,120 1050,140" />
+          </g>
+          <g class="silk-group silk-group--right">
+            <path class="silk-line" stroke="url(#gradC)" d="M1050,110 C800,160 650,120 500,160 C350,200 200,260 -50,300" />
+            <path class="silk-line" stroke="url(#gradA)" d="M1050,170 C800,200 650,170 500,200 C350,230 200,210 -50,230" />
+            <path class="silk-line" stroke="url(#gradB)" d="M1050,240 C800,220 650,180 500,180 C350,180 200,120 -50,150" />
+          </g>
+        </svg>
+
+        <!-- 中间实心字 -->
+        <div class="loader-fore-title" aria-live="polite">HUBUSEC</div>
+
+        <!-- 进入提示 -->
+        <div class="enter-hint" role="button" tabindex="0">点击任意键进入主页面</div>
+      </section>
+
+      <!-- 过渡界面（3行HUBUSEC快速流动） -->
+      <section id="transition" class="stage stage--transition" aria-hidden="true">
+        <div class="row">
+          <div class="ticker">
+            <span>HUBUSEC&nbsp;</span><span>HUBUSEC&nbsp;</span><span>HUBUSEC&nbsp;</span><span>HUBUSEC&nbsp;</span><span>HUBUSEC&nbsp;</span><span>HUBUSEC&nbsp;</span><span>HUBUSEC&nbsp;</span><span>HUBUSEC&nbsp;</span>
+          </div>
+        </div>
+        <div class="row">
+          <div class="ticker">
+            <span>HUBUSEC&nbsp;</span><span>HUBUSEC&nbsp;</span><span>HUBUSEC&nbsp;</span><span>HUBUSEC&nbsp;</span><span>HUBUSEC&nbsp;</span><span>HUBUSEC&nbsp;</span><span>HUBUSEC&nbsp;</span><span>HUBUSEC&nbsp;</span>
+          </div>
+        </div>
+        <div class="row">
+          <div class="ticker">
+            <span>HUBUSEC&nbsp;</span><span>HUBUSEC&nbsp;</span><span>HUBUSEC&nbsp;</span><span>HUBUSEC&nbsp;</span><span>HUBUSEC&nbsp;</span><span>HUBUSEC&nbsp;</span><span>HUBUSEC&nbsp;</span><span>HUBUSEC&nbsp;</span>
+          </div>
+        </div>
+      </section>
+
+      <!-- 主页面 -->
+      <main id="main" class="stage stage--main" aria-hidden="true">
+        <!-- 主页面彩色空心大字背景 -->
+        <div class="main-backdrop" aria-hidden="true">
+          <div class="bg-text">HUBUSEC</div>
+          <div class="bg-text">HUBUSEC</div>
+          <div class="bg-text">HUBUSEC</div>
+          <div class="bg-text">HUBUSEC</div>
+          <div class="bg-text">HUBUSEC</div>
+          <div class="bg-text">HUBUSEC</div>
+        </div>
+        
+        <div class="side side--left" aria-hidden="true">
+          <div class="scroll-container">
+            <div class="text-stream">
+              HUBUSEC HUBUSEC HUBUSEC HUBUSEC HUBUSEC HUBUSEC HUBUSEC HUBUSEC HUBUSEC HUBUSEC HUBUSEC HUBUSEC HUBUSEC HUBUSEC HUBUSEC HUBUSEC HUBUSEC HUBUSEC HUBUSEC HUBUSEC
+            </div>
+          </div>
+        </div>
+        <div class="center">
+          <div class="logo-container">
+            <img class="logo" src="static/logo.png" alt="HUBUSEC logo" id="main-logo" />
+            <!-- 长按进度条 -->
+            <div class="press-progress-container" id="press-progress-container">
+              <div class="press-progress-bar">
+                <div class="press-progress-fill" id="press-progress-fill"></div>
+              </div>
+              <div class="press-hint">继续长按...</div>
+            </div>
+          </div>
+          <div class="org-name">
+            <span id="typewriter-text"></span>
+            <span class="cursor">|</span>
+          </div>
+          <div id="center-title" class="center-title" role="button" tabindex="0">HUBUSEC</div>
+        </div>
+        <div class="side side--right" aria-hidden="true">
+          <div class="scroll-container">
+            <div class="text-stream">
+              HUBUSEC HUBUSEC HUBUSEC HUBUSEC HUBUSEC HUBUSEC HUBUSEC HUBUSEC HUBUSEC HUBUSEC HUBUSEC HUBUSEC HUBUSEC HUBUSEC HUBUSEC HUBUSEC HUBUSEC HUBUSEC HUBUSEC HUBUSEC
+            </div>
+          </div>
+        </div>
+      </main>
+
+      <!-- 协会介绍界面 -->
+      <section id="intro-stage" class="stage stage--intro" aria-hidden="true">
+        <!-- 保留过渡背景（三行滚动） -->
+        <div class="intro-background">
+          <div class="row">
+            <div class="ticker bg-ticker">
+              <span>HUBUSEC&nbsp;</span><span>HUBUSEC&nbsp;</span><span>HUBUSEC&nbsp;</span><span>HUBUSEC&nbsp;</span><span>HUBUSEC&nbsp;</span><span>HUBUSEC&nbsp;</span><span>HUBUSEC&nbsp;</span><span>HUBUSEC&nbsp;</span>
+            </div>
+          </div>
+          <div class="row">
+            <div class="ticker bg-ticker">
+              <span>HUBUSEC&nbsp;</span><span>HUBUSEC&nbsp;</span><span>HUBUSEC&nbsp;</span><span>HUBUSEC&nbsp;</span><span>HUBUSEC&nbsp;</span><span>HUBUSEC&nbsp;</span><span>HUBUSEC&nbsp;</span><span>HUBUSEC&nbsp;</span>
+            </div>
+          </div>
+          <div class="row">
+            <div class="ticker bg-ticker">
+              <span>HUBUSEC&nbsp;</span><span>HUBUSEC&nbsp;</span><span>HUBUSEC&nbsp;</span><span>HUBUSEC&nbsp;</span><span>HUBUSEC&nbsp;</span><span>HUBUSEC&nbsp;</span><span>HUBUSEC&nbsp;</span><span>HUBUSEC&nbsp;</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- 左上方竖幅菜单栏 -->
+        <div class="vertical-menu">
+          <div class="menu-header">
+            <span class="menu-title">HUBUSEC</span>
+            <button class="back-btn" title="返回主页面" aria-label="返回主页面">
+              <svg viewBox="0 0 24 24" width="20" height="20" fill="currentColor">
+                <path d="M20 11H7.83l5.59-5.59L12 4l-8 8 8 8 1.42-1.41L7.83 13H20v-2z"/>
+              </svg>
+            </button>
+          </div>
+          <nav class="menu-nav">
+            <button class="menu-item active" data-section="about">协会介绍</button>
+            <button class="menu-item" data-section="research">研究方向</button>
+            <button class="menu-item" data-section="members">历届成员</button>
+            <button class="menu-item" data-section="join">加入我们</button>
+          </nav>
+        </div>
+
+        <!-- 从菜单中间向右拉出的内容区域 -->
+        <div class="content-panel">
+          <!-- 终端加载界面 -->
+          <div class="terminal-loader" id="terminal-loader">
+            <div class="terminal-body">
+              <div class="terminal-content" id="terminal-content">
+                <div class="ascii-art" id="ascii-art"></div>
+                <div class="loading-messages" id="loading-messages"></div>
+                <div class="progress-container" id="progress-container" style="display: none;">
+                  <div class="progress-label">加载进度: </div>
+                  <div class="progress-bar">
+                    <div class="progress-fill" id="progress-fill"></div>
+                  </div>
+                  <div class="progress-text" id="progress-text">0%</div>
+                </div>
+              </div>
+            </div>
+          </div>
+          
+          <!-- 协会介绍 -->
+          <div class="content-section" id="section-about">
+            <h2>协会介绍</h2>
+            <p>湖北大学网络空间安全协会创立于2024年，挂靠于湖北大学网络空间安全学院，协会致力于学院学科建设，竞赛支持和分享进步，为湖北大学各年级各专业同学打造完善的网络信息安全学习平台，以热爱，坚持，分享，进步的精神为湖大学子的网安学习之路铺平障碍。</p>
+            
+            <h3>协会发展</h3>
+            <p>湖北网络空间安全协会主要以网络安全为方向，次设编程算法方向，提供多方向支持，形成重点化，两点化，多点并进的发展格局，为我院学子提供完善的学科发展支持。</p>
+          </div>
+
+          <!-- 研究方向 -->
+          <div class="content-section" id="section-research" style="display: none;">
+            <h2>研究方向</h2>
+            <div class="research-grid">
+              <div class="research-item">
+                <h3>Web安全</h3>
+                <p>研究 Web 应用漏洞挖掘与渗透测试，关注攻击原理与防御机制。</p>
+              </div>
+              <div class="research-item">
+                <h3>二进制漏洞挖掘</h3>
+                <p>探索程序底层漏洞的发现、利用与防护技术。</p>
+              </div>
+              <div class="research-item">
+                <h3>逆向工程</h3>
+                <p>分析二进制程序逻辑，还原设计意图与潜在风险。</p>
+              </div>
+              <div class="research-item">
+                <h3>密码学</h3>
+                <p>研究加密算法的安全性及其在实际场景中的正确应用。</p>
+              </div>
+              <div class="research-item">
+                <h3>移动安全</h3>
+                <p>聚焦移动平台与应用的安全机制及常见风险点。</p>
+              </div>
+              <div class="research-item">
+                <h3>人工智能安全</h3>
+                <p>探索 AI 模型与系统的潜在安全威胁与防护方法。</p>
+              </div>
+            </div>
+          </div>
+
+          <!-- 历届成员 -->
+          <div class="content-section" id="section-members" style="display: none;">
+            <h2>历届成员</h2>
+            
+            <div class="member-group">
+              <h3>历届会长</h3>
+              <button class="expand-btn" data-year="presidents">点击展开查看</button>
+              <div class="member-list" id="presidents" style="display: none;">
+                <div class="member-card">
+                  <div class="member-avatar">k13in</div>
+                  <div class="member-info">
+                    <span class="member-name">k13in</span>
+                    <span class="member-year">2024</span>
+                  </div>
+                </div>
+                <div class="member-card">
+                  <div class="member-avatar">Sorin</div>
+                  <div class="member-info">
+                    <span class="member-name">Sorin</span>
+                    <span class="member-year">2025</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div class="member-group">
+              <h3>2021</h3>
+              <button class="expand-btn" data-year="2021">点击展开查看</button>
+              <div class="member-list" id="2021" style="display: none;">
+                <div class="member-card">
+                  <div class="member-avatar">k13in</div>
+                  <div class="member-info">
+                    <span class="member-name">k13in</span>
+                  </div>
+                </div>
+                <div class="member-card">
+                  <div class="member-avatar">st4rry</div>
+                  <div class="member-info">
+                    <span class="member-name">st4rry</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div class="member-group">
+              <h3>2022</h3>
+              <button class="expand-btn" data-year="2022">点击展开查看</button>
+              <div class="member-list" id="2022" style="display: none;">
+                <div class="member-card">
+                  <div class="member-avatar">波克比QWQ</div>
+                  <div class="member-info">
+                    <span class="member-name">波克比QWQ</span>
+                  </div>
+                </div>
+                <div class="member-card">
+                  <div class="member-avatar">TGINᐝ</div>
+                  <div class="member-info">
+                    <span class="member-name">TGINᐝ</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div class="member-group">
+              <h3>2023</h3>
+              <button class="expand-btn" data-year="2023">点击展开查看</button>
+              <div class="member-list" id="2023" style="display: none;">
+                <div class="member-card">
+                  <div class="member-avatar">Sorin</div>
+                  <div class="member-info">
+                    <span class="member-name">Sorin</span>
+                    <span class="member-desc">静专思主，谦逊俨然</span>
+                  </div>
+                </div>
+                <div class="member-card">
+                  <div class="member-avatar">ShallowDream</div>
+                  <div class="member-info">
+                    <span class="member-name">ShallowDream</span>
+                  </div>
+                </div>
+                <div class="member-card">
+                  <div class="member-avatar">aber</div>
+                  <div class="member-info">
+                    <span class="member-name">aber</span>
+                  </div>
+                </div>
+                <div class="member-card">
+                  <div class="member-avatar">f0rev3r</div>
+                  <div class="member-info">
+                    <span class="member-name">f0rev3r</span>
+                  </div>
+                </div>
+                <div class="member-card">
+                  <div class="member-avatar">GUMO</div>
+                  <div class="member-info">
+                    <span class="member-name">GUMO</span>
+                  </div>
+                </div>
+                <div class="member-card">
+                  <div class="member-avatar">梦醒</div>
+                  <div class="member-info">
+                    <span class="member-name">梦醒</span>
+                  </div>
+                </div>
+                <div class="member-card">
+                  <div class="member-avatar">akaiwen</div>
+                  <div class="member-info">
+                    <span class="member-name">akaiwen</span>
+                  </div>
+                </div>
+                <div class="member-card">
+                  <div class="member-avatar">6jf</div>
+                  <div class="member-info">
+                    <span class="member-name">6jf</span>
+                  </div>
+                </div>
+                <div class="member-card">
+                  <div class="member-avatar">Pie</div>
+                  <div class="member-info">
+                    <span class="member-name">Pie</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- 加入我们 -->
+          <div class="content-section" id="section-join" style="display: none;">
+            <h2>HUBUSEC</h2>
+            <p>我们长期招新，欢迎各位同学联系我们，联系时请务必带上基础的信息，包括姓名学院专业学号等，也欢迎在秋季招新时加入我们的协会管理团队，共建更好的协会。</p>
+            
+            <h3>社团架构</h3>
+            <p>我们下设年级负责人，秘书部、组织部、宣传部、技术部五大部门</p>
+            
+            <div class="department-grid">
+              <div class="department-item">
+                <h4>年级负责人</h4>
+                <p>年级负责人负责沟通协调各年级事务，确保协会活动在不同年级顺利开展。</p>
+              </div>
+              <div class="department-item">
+                <h4>秘书部</h4>
+                <p>秘书部负责快速响应会长指令，确保各项任务按时完成，提升社团执行力，同时细致安排活动流程，从前期准备到后期收尾，保障活动顺利进行。另外整理会议记录与资料，便于社团成员查阅，积累社团经验与知识。</p>
+              </div>
+              <div class="department-item">
+                <h4>组织部</h4>
+                <p>组织部负责组织协会活动，包括组织协会成员参加比赛，组织协会成员参加活动，组织协会成员参加会议等。</p>
+              </div>
+              <div class="department-item">
+                <h4>宣传部</h4>
+                <p>宣传部负责协会的宣传工作，包括协会的宣传海报，协会的宣传视频，协会的宣传文章等。</p>
+              </div>
+              <div class="department-item">
+                <h4>技术部</h4>
+                <p>技术部负责协会的技术支持，包括协会的技术开发，协会的技术维护，协会的技术咨询等。</p>
+              </div>
+            </div>
+          </div>
+        </div>
+            </section>
+      
+      <!-- 隐藏彩蛋界面 -->
+      <section id="secret-stage" class="stage stage--secret" aria-hidden="true">
+        <div class="glitch-overlay" id="glitch-overlay"></div>
+        <div class="secret-content">
+          <div class="secret-message" id="secret-message"></div>
+          <div class="secret-cursor" id="secret-cursor">_</div>
+        </div>
+      </section>
+    </div>
+    <script src="script.js" defer></script>
+  </body>
+</html>
+
+
