@@ -924,6 +924,50 @@ html, body {
   font-weight: 500;
 }
 
+/* 首页海报弹窗 */
+.poster-modal {
+  position: fixed;
+  inset: 0;
+  display: grid;
+  place-items: center; /* 居中显示 */
+  background: rgba(0, 0, 0, 0.6);
+  z-index: 1000;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 220ms var(--ease-smooth);
+}
+
+.poster-modal[aria-hidden="false"] {
+  opacity: 1;
+  pointer-events: auto;
+}
+
+.poster-modal .modal-inner {
+  background: transparent;
+  border-radius: 0;
+  box-shadow: none;
+  padding: 0;
+  max-width: min(88vw, 1100px);
+  max-height: min(88vh, 1100px);
+  transform: translateY(-8vh) scale(0.97); /* 居中并上调一些 */
+  transition: transform 220ms var(--ease-smooth);
+  will-change: transform;
+}
+
+.poster-modal .poster-image {
+  display: block;
+  width: auto;
+  height: auto;
+  max-width: min(85vw, 1000px);
+  max-height: min(85vh, 1000px);
+  object-fit: contain;
+  border-radius: 0;
+}
+
+.poster-modal[aria-hidden="false"] .modal-inner {
+  transform: translateY(-8vh) scale(1);
+}
+
 .loading-message.error {
   color: #dc3545;
 }
@@ -1375,6 +1419,271 @@ html, body {
 
 .glitch-overlay.show {
   opacity: 1;
+}
+
+/* 三连空格彩蛋：闪屏与黑场 */
+.flash-layer {
+  position: absolute;
+  inset: 0;
+  background: #fff;
+  opacity: 0;
+  pointer-events: none;
+}
+
+.flash-layer.run {
+  animation: screenFlash 650ms ease-out forwards;
+}
+
+@keyframes screenFlash {
+  0% { opacity: 0; background: #fff; }
+  10% { opacity: 1; }
+  20% { opacity: 0; }
+  35% { opacity: 1; }
+  50% { opacity: 0; }
+  65% { opacity: 1; }
+  80% { opacity: 0.6; }
+  100% { opacity: 0; background: #000; }
+}
+
+/* 三连空格彩蛋：上下滚动大字区域 */
+.secret-scroll-zone {
+  position: absolute;
+  left: 0;
+  right: 0;
+  height: 20vh;
+  display: flex;
+  align-items: center;
+  overflow: hidden;
+}
+.secret-scroll-zone.top { top: 0; }
+.secret-scroll-zone.bottom { bottom: 0; }
+
+.secret-scroll-zone .row { width: 100%; }
+.secret-scroll-zone .ticker {
+  white-space: nowrap;
+  font-weight: 900; /* 黑体粗重感 */
+  font-size: clamp(42px, 8vw, 112px);
+  color: #0d47a1; /* 深蓝 */
+}
+.secret-scroll-zone .bg-ticker span {
+  color: #0d47a1; /* 深蓝 */
+  text-shadow: 0 0 10px rgba(13,71,161,0.18);
+}
+
+/* 复用 intro 背景滚动动画 */
+.secret-scroll-zone .bg-ticker { animation: bgTickerRun 8s linear infinite; }
+
+/* 中部蓝色条带与挖空字样 */
+.blue-band {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  width: min(85vw, 1400px);
+  height: clamp(140px, 22vh, 220px);
+  background: linear-gradient(180deg, #0d47a1, #0b3d91);
+  border-radius: 16px;
+  box-shadow: 0 20px 60px rgba(30,124,242,0.35), inset 0 -8px 24px rgba(0,0,0,0.35);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.blue-band .cutout-text {
+  font-weight: 900;
+  font-size: clamp(72px, 14vw, 200px);
+  letter-spacing: 0.06em;
+  /* 视觉“镂空”：使用黑色模拟孔洞（背景为黑场） */
+  color: #000;
+  text-transform: uppercase;
+  filter: drop-shadow(0 2px 0 rgba(255,255,255,0.22));
+}
+
+/* 用彩色字母填充镂空处 */
+.blue-band .fill-text {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  pointer-events: none;
+  font-weight: 900;
+  font-size: clamp(72px, 14vw, 200px);
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+.blue-band .fill-text .ch {
+  display: inline-block;
+  margin: 0 0.02em;
+  filter: drop-shadow(0 4px 12px rgba(0,0,0,0.35));
+}
+
+/* 下方输入提示（打字光标） */
+.type-prompt {
+  position: absolute;
+  left: 50%;
+  bottom: 4vh;
+  transform: translateX(-50%);
+  color: #fff;
+  font-family: 'Consolas', 'Monaco', 'Courier New', monospace;
+  font-size: clamp(18px, 2.8vw, 28px);
+  display: flex;
+  align-items: baseline;
+  gap: 8px;
+}
+.type-prompt .hint { color: #8fb9ff; }
+.type-prompt .typed { color: #fff; font-weight: 700; }
+.type-prompt .cursor { margin-left: 2px; animation: secretCursorBlink 1s infinite; }
+
+/* 每次按键爆炸的像素粒子 */
+.particle-layer {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+}
+.pixel {
+  position: absolute;
+  width: 7px;
+  height: 7px;
+  background: #cde0ff;
+  image-rendering: pixelated;
+  box-shadow: 0 0 0 1px rgba(0,0,0,0.1);
+  opacity: 1;
+  transition: transform 860ms cubic-bezier(0.2, 0.8, 0.2, 1), opacity 860ms linear;
+}
+
+/* 震动效果（通用类） */
+.shake-impact {
+  animation: pageGlitch 120ms ease-out;
+}
+
+/* 完成输入后的黑屏与字幕淡入淡出 */
+.witness-overlay {
+  position: absolute;
+  inset: 0;
+  background: #000;
+  z-index: 9999;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.witness-text {
+  color: #fff;
+  font-family: 'Consolas', 'Monaco', 'Courier New', monospace;
+  font-weight: 700;
+  letter-spacing: 2px;
+  font-size: clamp(28px, 7vw, 80px);
+  opacity: 0;
+  transition: opacity 800ms var(--ease-smooth);
+}
+
+/* 见证后小球交互阶段 */
+.circle-stage {
+  position: absolute;
+  inset: 0;
+  background: #000;
+  z-index: 10000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+}
+.white-expander {
+  position: absolute;
+  inset: 0;
+  background: #fff;
+  clip-path: circle(0px at 50% 50%);
+  transition: clip-path 160ms cubic-bezier(0.2, 0.8, 0.2, 1);
+  z-index: 1;
+}
+.circle-frame {
+  position: relative;
+  z-index: 2;
+  width: clamp(220px, 36vw, 420px);
+  height: clamp(220px, 36vw, 420px);
+  border: 6px solid #fff;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 8px 28px rgba(255,255,255,0.18), inset 0 0 0 0 rgba(0,0,0,0);
+  overflow: hidden;
+}
+.ball3d {
+  position: absolute;
+  width: 36%;
+  height: 36%;
+  border-radius: 50%;
+  background: radial-gradient(circle at 30% 30%, #ffffff 0%, #eaf0ff 30%, #c6d2ff 55%, #8fa3ff 75%, #3b55a9 100%);
+  box-shadow: 0 8px 28px rgba(255,255,255,0.35), inset 0 -8px 22px rgba(0,0,0,0.35);
+  transform: scale(1);
+  transition: transform 120ms var(--ease-smooth);
+}
+.hubusec-splash {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #000;
+  font-family: 'Consolas', 'Monaco', 'Courier New', monospace;
+  font-weight: 900;
+  letter-spacing: 2px;
+  font-size: clamp(36px, 10vw, 150px);
+  opacity: 0;
+  transition: opacity 700ms var(--ease-smooth);
+  z-index: 3;
+}
+.hubusec-splash.show { opacity: 1; }
+
+/* 移动端控制按钮 */
+.circle-controls {
+  position: absolute;
+  z-index: 4;
+  bottom: 6vh;
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  gap: 18px;
+}
+.circle-controls .ctrl-btn {
+  min-width: clamp(80px, 22vw, 140px);
+  padding: 14px 18px;
+  border-radius: 14px;
+  border: 2px solid rgba(255,255,255,0.7);
+  background: rgba(255,255,255,0.12);
+  color: #fff;
+  font-weight: 700;
+  letter-spacing: 1px;
+  text-align: center;
+  backdrop-filter: blur(6px);
+  -webkit-backdrop-filter: blur(6px);
+  box-shadow: 0 6px 18px rgba(0,0,0,0.3), inset 0 0 0 0 rgba(255,255,255,0.2);
+  cursor: pointer;
+  user-select: none;
+  touch-action: none;
+  transition: transform 120ms var(--ease-smooth), background 160ms var(--ease-smooth);
+}
+.circle-controls .ctrl-btn:active { transform: scale(0.96); background: rgba(255,255,255,0.18); }
+
+/* 小球阶段成员名字叠层 */
+.name-overlay {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  overflow: hidden;
+}
+.name-overlay-dark { z-index: 0; color: #fff; }
+.name-overlay-light { z-index: 2; color: #000; }
+.name-label {
+  position: absolute;
+  white-space: nowrap;
+  opacity: 0;
+  transition: opacity 600ms var(--ease-smooth);
+  font-weight: 600;
+  letter-spacing: 0.5px;
+  font-size: clamp(12px, 2.2vh, 22px);
+  text-shadow: 0 1px 2px rgba(0,0,0,0.35);
 }
 
 .secret-content {

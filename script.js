@@ -9,6 +9,74 @@
   let readyToEnter = false;
   let hasEntered = false;
 
+  // 首页海报弹窗：初始化/显示/隐藏
+  function initPosterModal() {
+    const modal = document.getElementById('poster-modal');
+    if (!modal) return;
+    const inner = modal.querySelector('.modal-inner');
+    // 点击内容区域不关闭
+    if (inner && !inner.dataset.bound) {
+      inner.addEventListener('click', (e) => e.stopPropagation());
+      inner.addEventListener('pointerdown', (e) => e.stopPropagation());
+      inner.dataset.bound = '1';
+    }
+    // 点击遮罩关闭
+    if (!modal.dataset.bound) {
+      const closeIfOverlay = (e) => {
+        if (e.target === modal) hidePosterModal();
+      };
+      modal.addEventListener('click', closeIfOverlay);
+      modal.addEventListener('pointerdown', closeIfOverlay);
+      modal.dataset.bound = '1';
+    }
+  }
+
+  function showHomePosterModal() {
+    const modal = document.getElementById('poster-modal');
+    if (!modal) return;
+    modal.setAttribute('aria-hidden', 'false');
+    startPosterCycle();
+  }
+
+  function hidePosterModal() {
+    const modal = document.getElementById('poster-modal');
+    if (!modal) return;
+    modal.setAttribute('aria-hidden', 'true');
+    stopPosterCycle();
+  }
+
+  // 弹窗海报循环：海报1s -> 闪屏1 0.25s -> 闪屏2 0.25s -> 海报...
+  let posterCycleTimer = null;
+  let posterCycleIndex = 0;
+  const posterFrames = [
+    { src: 'static/海报.png', duration: 1000 },
+    { src: 'static/闪屏1.png', duration: 100 },
+    { src: 'static/闪屏2.png', duration: 100 },
+  ];
+
+  function startPosterCycle() {
+    const img = document.querySelector('#poster-modal .poster-image');
+    const modal = document.getElementById('poster-modal');
+    if (!img || !modal || modal.getAttribute('aria-hidden') === 'true') return;
+    clearTimeout(posterCycleTimer);
+    // 设置当前帧
+    const frame = posterFrames[posterCycleIndex % posterFrames.length];
+    img.src = frame.src;
+    // 计划下一帧
+    posterCycleTimer = setTimeout(() => {
+      posterCycleIndex = (posterCycleIndex + 1) % posterFrames.length;
+      startPosterCycle();
+    }, frame.duration);
+  }
+
+  function stopPosterCycle() {
+    clearTimeout(posterCycleTimer);
+    posterCycleTimer = null;
+    posterCycleIndex = 0;
+    const img = document.querySelector('#poster-modal .poster-image');
+    if (img) img.src = 'static/海报.png';
+  }
+
   function onAnyKeyOrClick(ev) {
     if (!readyToEnter || hasEntered) return;
     hasEntered = true;
@@ -46,6 +114,8 @@
       transitionStage && transitionStage.setAttribute('aria-hidden', 'true');
       mainStage && mainStage.setAttribute('aria-hidden', 'false');
       requestAnimationFrame(() => mainStage && mainStage.classList.add('show'));
+      // 进入首页时显示海报弹窗
+      showHomePosterModal();
       startMainInteractions();
     }, 1100);
   }
@@ -77,7 +147,9 @@
     const texts = [
       '湖北大学网络空间安全协会',
       '点击HUBUSEC查看详情', 
-      '长按LOGO试试看'
+      '长按LOGO试试看',
+      '扣666',
+      '今天官网有些不一样啊'
     ];
     
     let currentTextIndex = 0;
@@ -827,7 +899,7 @@
     audio.loop = true; // 循环播放
     audio.volume = 0.5; // 设置音量为50%
     audio.play().catch(e => {
-      console.log('音频播放失败:', e);
+      // 音频播放失败
     });
     
     const storyTexts = [
@@ -1208,6 +1280,8 @@ Hubei University`;
     if (secretStage && mainStage) {
       secretStage.setAttribute('aria-hidden', 'true');
       mainStage.setAttribute('aria-hidden', 'false');
+      // 返回首页时显示海报弹窗
+      showHomePosterModal();
       
       // 重置状态
       const progressContainer = document.getElementById('press-progress-container');
@@ -1325,6 +1399,8 @@ Hubei University`;
         transitionStage.setAttribute('aria-hidden', 'true');
         transitionStage.classList.remove('run');
         mainStage.setAttribute('aria-hidden', 'false');
+        // 返回首页时显示海报弹窗
+        showHomePosterModal();
       }, 1900);
     }, 300);
   }
@@ -1332,8 +1408,10 @@ Hubei University`;
   // 启动
   if (document.readyState === 'loading') {
     document.addEventListener('DOMContentLoaded', startLoader, { once: true });
+    document.addEventListener('DOMContentLoaded', initPosterModal, { once: true });
   } else {
     startLoader();
+    initPosterModal();
   }
   
   // 全局键盘事件（ESC返回主页）
@@ -1348,6 +1426,553 @@ Hubei University`;
     }
   });
   
+  // 三连空格触发隐藏彩蛋（独立于LOGO长按）
+  (function initTripleSpaceEasterEgg() {
+    let spaceCount = 0;
+    let lastSpaceTime = 0;
+    let resetTimer = null;
+    let active = false;
+    let previousStageId = null;
+
+    function getCurrentStageId() {
+      const stages = ['loader', 'transition', 'main', 'intro-stage', 'secret-stage'];
+      for (const id of stages) {
+        const el = document.getElementById(id);
+        if (el && el.getAttribute('aria-hidden') === 'false') return id;
+      }
+      return 'main';
+    }
+
+    function buildSecretScene() {
+      const secretStage = document.getElementById('secret-stage');
+      if (!secretStage) return;
+      secretStage.innerHTML = `
+        <div class="flash-layer" id="flash-layer"></div>
+        <div class="secret-scroll-zone top">
+          <div class="row">
+            <div class="ticker bg-ticker">
+              <span>HUBUCTF&nbsp;</span><span>HUBUCTF&nbsp;</span><span>HUBUCTF&nbsp;</span><span>HUBUCTF&nbsp;</span><span>HUBUCTF&nbsp;</span><span>HUBUCTF&nbsp;</span><span>HUBUCTF&nbsp;</span><span>HUBUCTF&nbsp;</span>
+            </div>
+          </div>
+        </div>
+        <div class="blue-band">
+          <div class="cutout-text">HUBUCTF</div>
+          <div class="fill-text" id="fill-text"></div>
+        </div>
+        <div class="secret-scroll-zone bottom">
+          <div class="row">
+            <div class="ticker bg-ticker">
+              <span>HUBUCTF&nbsp;</span><span>HUBUCTF&nbsp;</span><span>HUBUCTF&nbsp;</span><span>HUBUCTF&nbsp;</span><span>HUBUCTF&nbsp;</span><span>HUBUCTF&nbsp;</span><span>HUBUCTF&nbsp;</span><span>HUBUCTF&nbsp;</span>
+            </div>
+          </div>
+        </div>
+        <div class="type-prompt" id="type-prompt">
+          <span class="hint">请输入</span>
+          <span class="typed" id="typed-output"></span>
+          <span class="cursor">|</span>
+        </div>
+        <div class="particle-layer" id="particle-layer"></div>
+      `;
+    }
+
+    // 简单的8bit按键音（WebAudio方波）
+    let audioCtx = null;
+    // 完成输入后播放的CTF音乐（避免叠加播放）
+    let ctfAudio = null;
+    function playBeep() {
+      try {
+        if (!audioCtx) audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+        const osc = audioCtx.createOscillator();
+        const gain = audioCtx.createGain();
+        osc.type = 'square';
+        osc.frequency.value = 880 + Math.random() * 220; // 8bit随机小抖动
+        gain.gain.value = 0.06;
+        osc.connect(gain);
+        gain.connect(audioCtx.destination);
+        osc.start();
+        setTimeout(() => { osc.stop(); }, 110);
+      } catch (e) {
+        // 忽略音频失败
+      }
+    }
+
+    function shakeOnce() {
+      const secretStage = document.getElementById('secret-stage');
+      if (!secretStage) return;
+      secretStage.classList.add('shake-impact');
+      setTimeout(() => secretStage.classList.remove('shake-impact'), 140);
+    }
+
+    function spawnParticles() {
+      const layer = document.getElementById('particle-layer');
+      const band = document.querySelector('.blue-band');
+      if (!layer || !band) return;
+      const rect = band.getBoundingClientRect();
+      const originX = rect.left + rect.width / 2;
+      const originY = rect.top + rect.height / 2;
+      const count = 140; // 大量像素块弹射
+      for (let i = 0; i < count; i++) {
+        const px = document.createElement('div');
+        px.className = 'pixel';
+        const x = originX + (Math.random() - 0.5) * rect.width * 0.6;
+        const y = originY + (Math.random() - 0.5) * rect.height * 0.6;
+        px.style.left = x + 'px';
+        px.style.top = y + 'px';
+        const dx = (Math.random() - 0.5) * 680;
+        const dy = (Math.random() - 0.5) * 360;
+        const hue = 210 + Math.floor(Math.random() * 40);
+        const light = 55 + Math.floor(Math.random() * 35);
+        px.style.background = `hsl(${hue}, 100%, ${light}%)`;
+        layer.appendChild(px);
+        requestAnimationFrame(() => {
+          px.style.transform = `translate(${dx}px, ${dy}px) scale(${0.6 + Math.random() * 0.5})`;
+          px.style.opacity = '0';
+        });
+        setTimeout(() => { if (px.parentNode) px.parentNode.removeChild(px); }, 900);
+      }
+    }
+
+    function startSequence() {
+      if (active) return;
+      active = true;
+      previousStageId = getCurrentStageId();
+
+      const secretStage = document.getElementById('secret-stage');
+      const mainStage = document.getElementById('main');
+      if (!secretStage || !mainStage) return;
+
+      // 切换到隐藏彩蛋舞台
+      mainStage.setAttribute('aria-hidden', 'true');
+      secretStage.setAttribute('aria-hidden', 'false');
+
+      // 构建场景与闪屏
+      buildSecretScene();
+      const flash = document.getElementById('flash-layer');
+      if (flash) flash.classList.add('run');
+
+      // 准备音乐：避免叠加播放，进入页面时重置
+      try {
+        if (!ctfAudio) {
+          ctfAudio = new Audio('static/ctf.mp3');
+          ctfAudio.preload = 'auto';
+        }
+        ctfAudio.pause();
+        ctfAudio.currentTime = 0;
+      } catch (e) {}
+
+      // 2秒后确保滚动与条带显示（flash结束即黑场）
+      setTimeout(() => {
+        // 无需额外处理：元素已渲染并滚动
+        startTyping();
+      }, 2000);
+    }
+
+    function shakeVisibleStage() {
+      const id = getCurrentStageId();
+      const el = document.getElementById(id);
+      if (!el) return;
+      el.classList.add('shake-impact');
+      setTimeout(() => el.classList.remove('shake-impact'), 140);
+    }
+
+    function finishAndReturn() {
+      // 返回至主页面或之前的页面
+      const introStage = document.getElementById('intro-stage');
+      const mainStage = document.getElementById('main');
+      const secretStage = document.getElementById('secret-stage');
+      if (!secretStage || !mainStage) return;
+
+      // 简洁处理：统一返回主页面
+      secretStage.setAttribute('aria-hidden', 'true');
+      mainStage.setAttribute('aria-hidden', 'false');
+      // 返回首页时显示海报弹窗
+      showHomePosterModal();
+      active = false;
+    }
+
+    function runWitnessSequence() {
+      const secretStage = document.getElementById('secret-stage');
+      if (!secretStage) { finishAndReturn(); return; }
+
+      // 构造黑屏与字幕容器
+      const overlay = document.createElement('div');
+      overlay.className = 'witness-overlay';
+      const textEl = document.createElement('div');
+      textEl.className = 'witness-text';
+      overlay.appendChild(textEl);
+      secretStage.appendChild(overlay);
+
+      const phrases = ['见证', '湖北大学网络空间安全协会', '重新起航！'];
+
+      // 逐条淡入/淡出
+      let i = 0;
+      function showNext() {
+        if (i >= phrases.length) {
+          // 进入小球交互阶段
+          setTimeout(() => {
+            if (overlay && overlay.parentNode) overlay.parentNode.removeChild(overlay);
+            runCircleBallSequence();
+          }, 280);
+          return;
+        }
+        textEl.textContent = phrases[i];
+        textEl.style.opacity = '0';
+        // 淡入
+        requestAnimationFrame(() => {
+          textEl.style.opacity = '1';
+        });
+        // 保持显示后淡出
+        setTimeout(() => {
+          textEl.style.opacity = '0';
+          setTimeout(() => {
+            i++;
+            showNext();
+          }, 500);
+        }, 1300);
+      }
+
+      // 先黑屏片刻再开始字幕
+      setTimeout(showNext, 400);
+    }
+
+    function switchHomeToCTFVariant() {
+      const centerTitleEl = document.getElementById('center-title');
+      const mainLogoEl = document.getElementById('main-logo');
+      if (centerTitleEl) centerTitleEl.textContent = 'HUBUCTF';
+      if (mainLogoEl) {
+        mainLogoEl.src = 'static/ctflogo.png';
+        mainLogoEl.alt = 'HUBUCTF logo';
+      }
+    }
+
+    function runCircleBallSequence() {
+      const secretStage = document.getElementById('secret-stage');
+      if (!secretStage) { finishAndReturn(); return; }
+      const stage = document.createElement('div');
+      stage.className = 'circle-stage';
+      const expander = document.createElement('div');
+      expander.className = 'white-expander';
+      const frame = document.createElement('div');
+      frame.className = 'circle-frame';
+      const ball = document.createElement('div');
+      ball.className = 'ball3d';
+      // 成员名字叠层（黑区白字 / 白区黑字）
+      const darkLayer = document.createElement('div');
+      darkLayer.className = 'name-overlay name-overlay-dark';
+      const lightLayer = document.createElement('div');
+      lightLayer.className = 'name-overlay name-overlay-light';
+      const controls = document.createElement('div');
+      controls.className = 'circle-controls';
+      const btnForward = document.createElement('button');
+      btnForward.className = 'ctrl-btn';
+      btnForward.type = 'button';
+      btnForward.textContent = '前进';
+      btnForward.setAttribute('aria-label', '前进');
+      const btnBack = document.createElement('button');
+      btnBack.className = 'ctrl-btn';
+      btnBack.type = 'button';
+      btnBack.textContent = '后退';
+      btnBack.setAttribute('aria-label', '后退');
+      controls.appendChild(btnForward);
+      controls.appendChild(btnBack);
+      // 按层级顺序添加：黑区名字层（0）→ 白区扩张层（1）→ 白区名字层（2，置于框之前）→ 圆框/小球（2）→ 控制按钮（4）
+      stage.appendChild(darkLayer);
+      stage.appendChild(expander);
+      stage.appendChild(lightLayer);
+      stage.appendChild(frame);
+      frame.appendChild(ball);
+      stage.appendChild(controls);
+      secretStage.appendChild(stage);
+
+      // 初始半径与最大半径（全屏填充）
+      const w = secretStage.clientWidth || window.innerWidth;
+      const h = secretStage.clientHeight || window.innerHeight;
+      const maxR = Math.sqrt(w*w + h*h);
+      const minR = Math.min(w, h) * 0.06; // 初始较小白圈
+      let progress = 0; // 0→1 对应约 10 秒的前进过程
+      let holdingUp = false;
+      let holdingDown = false;
+      let running = true;
+      let last = performance.now();
+      let currentR = minR;
+      let disposed = false;
+
+      // 采集历届成员姓名（使用“历届成员”面板中的真实数据）
+      const collectNames = (years) => {
+        const result = [];
+        years.forEach((y) => {
+          const list = document.getElementById(String(y));
+          if (!list) return;
+          list.querySelectorAll('.member-name').forEach((el) => {
+            const t = (el.textContent || '').trim();
+            if (t) result.push(t);
+          });
+        });
+        return result;
+      };
+      const legacyNames = collectNames([2021, 2022, 2023]);
+      const newNames = collectNames([2024, 2025]);
+
+      // 随机位置与标签生成
+      const rand = (min, max) => Math.random() * (max - min) + min;
+      function createLabel(name, color) {
+        const span = document.createElement('span');
+        span.className = 'name-label';
+        span.textContent = name;
+        span.style.color = color;
+        return span;
+      }
+      function tryPlace(layer, name, insideCircle) {
+        const sw = stage.clientWidth;
+        const sh = stage.clientHeight;
+        const margin = 24; // 与白圈边缘的安全距离
+        for (let i = 0; i < 28; i++) {
+          const x = rand(40, sw - 40);
+          const y = rand(40, sh - 40);
+          const dx = x - sw / 2;
+          const dy = y - sh / 2;
+          const dist = Math.sqrt(dx*dx + dy*dy);
+          const ok = insideCircle ? (dist <= Math.max(0, currentR - margin)) : (dist >= currentR + margin);
+          if (ok) {
+            const el = createLabel(name, insideCircle ? '#000' : '#fff');
+            el.style.left = `${x}px`;
+            el.style.top = `${y}px`;
+            layer.appendChild(el);
+            // 淡入
+            requestAnimationFrame(() => { el.style.opacity = '1'; });
+            // 持续一段时间后淡出并移除
+            const hold = rand(800, 1600);
+            const fade = rand(280, 640);
+            setTimeout(() => {
+              el.style.opacity = '0';
+              setTimeout(() => { if (el.parentNode) el.parentNode.removeChild(el); }, fade);
+            }, hold);
+            return true;
+          }
+        }
+        return false;
+      }
+      // 循环随机生成名字（黑区：21/22/23 白色圈内：24/25）
+      let darkTimer = 0;
+      let lightTimer = 0;
+      function scheduleDark() {
+        if (disposed) return;
+        darkTimer = setTimeout(() => {
+          if (legacyNames.length) {
+            const name = legacyNames[Math.floor(Math.random() * legacyNames.length)];
+            tryPlace(darkLayer, name, false);
+          }
+          scheduleDark();
+        }, rand(420, 980));
+      }
+      function scheduleLight() {
+        if (disposed) return;
+        lightTimer = setTimeout(() => {
+          if (newNames.length) {
+            const name = newNames[Math.floor(Math.random() * newNames.length)];
+            tryPlace(lightLayer, name, true);
+          }
+          scheduleLight();
+        }, rand(520, 1100));
+      }
+      scheduleDark();
+      scheduleLight();
+
+      // 初始位置（球在圆框内底部，稍大）
+      expander.style.clipPath = `circle(${minR}px at 50% 50%)`;
+      ball.style.position = 'absolute';
+      ball.style.left = '50%';
+      ball.style.bottom = '6%';
+      ball.style.transform = 'translateX(-50%) scale(1.2)';
+
+      function onKeyDown(e) {
+        if (e.key === 'ArrowUp') {
+          holdingUp = true;
+        } else if (e.key === 'ArrowDown') {
+          holdingDown = true;
+        }
+      }
+      function onKeyUp(e) {
+        if (e.key === 'ArrowUp') holdingUp = false;
+        if (e.key === 'ArrowDown') holdingDown = false;
+      }
+      document.addEventListener('keydown', onKeyDown);
+      document.addEventListener('keyup', onKeyUp);
+
+      // 移动端/鼠标：按钮按压保持前进/后退
+      const fwDown = (e) => { e.preventDefault(); holdingUp = true; };
+      const fwUp = () => { holdingUp = false; };
+      const bkDown = (e) => { e.preventDefault(); holdingDown = true; };
+      const bkUp = () => { holdingDown = false; };
+      btnForward.addEventListener('pointerdown', fwDown, { passive: false });
+      btnForward.addEventListener('pointerup', fwUp);
+      btnForward.addEventListener('pointerleave', fwUp);
+      btnForward.addEventListener('pointercancel', fwUp);
+      btnBack.addEventListener('pointerdown', bkDown, { passive: false });
+      btnBack.addEventListener('pointerup', bkUp);
+      btnBack.addEventListener('pointerleave', bkUp);
+      btnBack.addEventListener('pointercancel', bkUp);
+
+      function updateScene(p) {
+        // 更新白色扩张
+        const r = minR + p * (maxR - minR);
+        expander.style.clipPath = `circle(${r}px at 50% 50%)`;
+        currentR = r;
+
+        // 更新球位置与大小（从圆框底部向中心上移，并变小，模拟远去）
+        const fh = frame.clientHeight;
+        const bh = ball.clientHeight;
+        const startBottom = Math.max(0, fh * 0.06);
+        const centerBottom = Math.max(0, (fh - bh) / 2);
+        const bottomPx = startBottom + p * (centerBottom - startBottom);
+        const scale = 1.25 - 0.4 * p; // 由近到远缩小
+        ball.style.bottom = `${Math.min(fh - bh, Math.max(0, bottomPx))}px`;
+        ball.style.transform = `translateX(-50%) scale(${scale})`;
+      }
+
+      function loop(now) {
+        if (!running) return;
+        const dt = Math.max(0, now - last);
+        last = now;
+        if (holdingUp) {
+          // 约 10 秒走完 0→1
+          progress = Math.min(1, progress + dt / 10000);
+        } else if (holdingDown) {
+          progress = Math.max(0, progress - dt / 10000);
+        }
+
+        updateScene(progress);
+
+        if (progress >= 0.999) {
+          complete();
+          return;
+        }
+        requestAnimationFrame(loop);
+      }
+      requestAnimationFrame(loop);
+
+      function complete() {
+        running = false;
+        disposed = true;
+        document.removeEventListener('keydown', onKeyDown);
+        document.removeEventListener('keyup', onKeyUp);
+        btnForward.removeEventListener('pointerdown', fwDown);
+        btnForward.removeEventListener('pointerup', fwUp);
+        btnForward.removeEventListener('pointerleave', fwUp);
+        btnForward.removeEventListener('pointercancel', fwUp);
+        btnBack.removeEventListener('pointerdown', bkDown);
+        btnBack.removeEventListener('pointerup', bkUp);
+        btnBack.removeEventListener('pointerleave', bkUp);
+        btnBack.removeEventListener('pointercancel', bkUp);
+        clearTimeout(darkTimer);
+        clearTimeout(lightTimer);
+        // 移除叠层
+        if (darkLayer && darkLayer.parentNode) darkLayer.parentNode.removeChild(darkLayer);
+        if (lightLayer && lightLayer.parentNode) lightLayer.parentNode.removeChild(lightLayer);
+        expander.style.clipPath = `circle(${maxR}px at 50% 50%)`;
+
+        const splash = document.createElement('div');
+        splash.className = 'hubusec-splash';
+        splash.textContent = 'HUBUSEC';
+        stage.appendChild(splash);
+        requestAnimationFrame(() => splash.classList.add('show'));
+
+        // 2秒后淡出并进入首页（切换为CTF变体）
+        setTimeout(() => {
+          splash.style.opacity = '0';
+          setTimeout(() => {
+            if (stage && stage.parentNode) stage.parentNode.removeChild(stage);
+            switchHomeToCTFVariant();
+            finishAndReturn();
+          }, 800);
+        }, 2000);
+      }
+    }
+
+    function startTyping() {
+      const typedOut = document.getElementById('typed-output');
+      const fillText = document.getElementById('fill-text');
+      if (!typedOut) return;
+      const target = 'HUBUCTF';
+      let index = 0;
+      let started = false;
+      const palette = ['#ff5c7a','#ffd54f','#4dd0e1','#66bb6a','#ba68c8','#ff8a65','#29b6f6'];
+
+      function onKey(e) {
+        if (!active) return;
+        if (e.key.length === 1) {
+          const ch = e.key.toUpperCase();
+          if (ch === target[index]) {
+            typedOut.textContent = (typedOut.textContent || '') + ch;
+            // 将彩色字母填充到条带镂空处
+            if (fillText) {
+              const span = document.createElement('span');
+              span.className = 'ch';
+              span.textContent = ch;
+              span.style.color = palette[index % palette.length];
+              fillText.appendChild(span);
+            }
+            index++;
+            // 每个按键：震动+像素爆炸+音效
+            shakeOnce();
+            spawnParticles();
+            playBeep();
+            if (!started) {
+              started = true;
+            }
+          if (index >= target.length) {
+            document.removeEventListener('keydown', onKey);
+            // 完成输入后自动播放音乐（不叠加，已在进入页面时重置）
+            try {
+              if (ctfAudio) {
+                ctfAudio.pause();
+                ctfAudio.currentTime = 0;
+                const p = ctfAudio.play();
+                if (p && typeof p.catch === 'function') p.catch(() => {});
+              }
+            } catch (e) {}
+            // 执行黑屏与字幕淡入淡出序列
+            runWitnessSequence();
+          }
+        } else {
+          // 错误输入：仅震动与轻微音效提示
+          shakeOnce();
+          playBeep();
+          }
+        }
+      }
+
+      document.addEventListener('keydown', onKey);
+    }
+
+    // 监听三次“6”键
+    document.addEventListener('keydown', (e) => {
+      // 处于输入状态时，不再触发新的序列
+      if (active) return;
+      if (e.key === '6' || e.code === 'Digit6' || e.code === 'Numpad6') {
+        // 每次按下 6 给出晃动提示
+        shakeVisibleStage();
+        const now = performance.now();
+        if (lastSpaceTime === 0 || (now - lastSpaceTime) <= 380) {
+          spaceCount++;
+        } else {
+          spaceCount = 1;
+        }
+        lastSpaceTime = now;
+        clearTimeout(resetTimer);
+        resetTimer = setTimeout(() => { spaceCount = 0; lastSpaceTime = 0; }, 420);
+        if (spaceCount >= 3) {
+          e.preventDefault();
+          spaceCount = 0; lastSpaceTime = 0;
+          startSequence();
+        }
+      } else {
+        // 其他键打断连续性
+        spaceCount = 0; lastSpaceTime = 0;
+      }
+    });
+  })();
+
   // 增强交互效果
   document.addEventListener('mousemove', (e) => {
     const introStage = document.getElementById('intro-stage');
